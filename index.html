@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HiMoto Tours – Discover the Soul of the Himalayas</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="animations.js" defer></script>
+
+    <style>
+        .upcoming-tours {
+            background: #f9f9f9; /* Light grey background */
+        }
+
+        .upcoming-tours .section-title {
+            position: relative;
+            display: inline-block; /* To make the underline fit the text */
+            padding-bottom: 10px;
+        }
+
+        /* Red underline style from your image */
+        .upcoming-tours .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40%;
+            height: 4px;
+            background-color: #c0392b; /* HiMoto red */
+        }
+
+        .tour-slider-container {
+            position: relative;
+        }
+
+        .tour-slider-wrapper {
+            display: flex;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            scroll-snap-type: x mandatory; /* Smooth snapping */
+            padding: 1.5rem 0 2rem 0;
+            
+            /* Hide scrollbar for a cleaner look */
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        .tour-slider-wrapper::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+
+        .tour-card {
+            flex: 0 0 360px; /* Fixed width for desktop cards */
+            margin-right: 1.5rem;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            scroll-snap-align: start; /* Snap to the start of the card */
+            transition: transform 0.3s ease;
+        }
+        .tour-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .tour-card-image {
+            width: 100%;
+            height: 240px;
+            overflow: hidden;
+        }
+        .tour-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .tour-card-content {
+            padding: 1.25rem;
+        }
+        .tour-card-content h3 {
+            margin-top: 0;
+            margin-bottom: 0.25rem;
+            font-size: 1.5rem;
+            font-family: 'Playfair Display', serif;
+            color: #333;
+        }
+        .tour-subtitle {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #777;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 1.25rem;
+        }
+
+        .tour-stats {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            padding-bottom: 1.25rem;
+            margin-bottom: 1.25rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .stat-item {
+            color: #555;
+        }
+        .stat-item svg {
+            width: 28px;
+            height: 28px;
+            stroke: #c0392b;
+            margin-bottom: 0.5rem;
+        }
+        .stat-item span {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .tour-card-cta {
+            display: block;
+            text-align: center;
+            background:#092861 ;
+            color: #fff;
+            padding: 0.75rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: background 0.3s ease;
+        }
+        .tour-card-cta:hover {
+            background: #092861;
+        }
+
+        /* Slider Navigation Buttons */
+        .tour-slider-container .slider-nav {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            padding: 0.5rem 1rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border: none;
+            user-select: none;
+            transition: background 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+        }
+        .tour-slider-container .slider-nav:hover {
+            background: #fff;
+            color: #c0392b;
+        }
+        .tour-slider-container .slider-nav.prev {
+            left: -25px; /* Position half-out */
+        }
+        .tour-slider-container .slider-nav.next {
+            right: -25px; /* Position half-out */
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .tour-card {
+                flex: 0 0 90%; /* One card takes 90% of screen */
+                margin-right: 1rem;
+            }
+            .tour-card:first-child {
+                margin-left: 5%; /* Center the first card */
+            }
+            .tour-card:last-child {
+                margin-right: 5%; /* Space after the last card */
+            }
+
+            /* Hide desktop buttons on mobile (swipe is better) */
+            .tour-slider-container .slider-nav {
+                display: none;
+            }
+        }
+    </style>
+    </head>
+
+<body>
+
+<header class="main-header main-header-static">
+
+    <nav class="navbar">
+        <div class="nav-logo">
+            <a href="index.html">HiMoto Tours</a>
+        </div>
+
+        <button class="nav-toggle" id="mobileMenuBtn">
+            <span></span><span></span><span></span>
+        </button>
+
+        <ul class="nav-menu" id="mobileMenu">
+            <li><a href="index.html" class="active">Home</a></li>
+            <li><a href="all-tours.html" >All Tours</a></li>
+            <li><a href="adventure-styles.html">Tour Styles</a></li>
+            <li><a href="vehicle-styles.html">Vehicle Types</a></li>
+        </ul>
+
+        <a href="https://wa.me/919459028853?text=Hi%20I%20want%20to%20inquire%20about%20a%20Himalayan%20tour" class="cta-button nav-cta" target="_blank">
+            Plan Your Trip
+        </a>
+    </nav>
+</header>
+
+
+    <main>
+
+        <section class="hero">
+           <video class="hero-video" poster="assets/bg2.jpg" playsinline autoplay muted loop>
+                <source src="assets/Drone_aerial_shot_Cinematic_l.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+
+            <div class="hero-content">
+                <h1 class="hero-title">Ride. Explore. <br> Feel the Freedom of the Himalayas.</h1>
+                <p class="hero-subtitle">
+                    Welcome to HiMoto Tours, your gateway to unforgettable journeys through the majestic
+                    mountains of North India.
+                </p>
+                <a href="all-tours.html" class="cta-button hero-cta">Discover Our Tours</a>
+            </div>
+            </section>
+<section class="explore-styles content-section">
+    <div class="container">
+        <h2 class="section-title">Explore Your Ride</h2>
+        <p class="section-intro">From solo thrills to group comfort, travel in your own style.</p>
+        
+        <div class="style-grid">
+            
+            <a href="vehicle-styles.html#bikes" class="style-card bike-card"> 
+                <h3 class="card-title">Adventure Bikes</h3>
+                <p class="card-description">For thrill-seekers and explorers.</p>
+            </a>
+
+            <a href="vehicle-styles.html#cars" class="style-card car-card"> 
+                <h3 class="card-title">4x4 Cars</h3>
+                <p class="card-description">Comfort with a touch of adventure.</p>
+            </a>
+
+            <a href="vehicle-styles.html#campervans" class="style-card campervan-card"> 
+                <h3 class="card-title">Campervans</h3>
+                <p class="card-description">Home on the move</p>
+            </a>
+
+            <a href="vehicle-styles.html#minibuses" class="style-card minibus-card"> 
+                <h3 class="card-title">Mini Buses</h3>
+                <p class="card-description">Perfect for small groups and families</p>
+            </a>
+        </div>
+    </div>
+</section>
+</section>
+
+        <section class="ideal-for-section content-section">
+    <div class="container">
+        <h2 class="section-title">An Adventure for Everyone</h2>
+        <p class="section-intro">From solo journeys to group adventures, every trail is open to you.</p>
+        
+        <div class="style-grid">
+            
+            <a href="adventure-styles.html#solo" class="style-card solo-card"> 
+                <h3 class="card-title">Solo Travelers</h3>
+                <p class="card-description">Find your own path and join a community of explorers.</p>
+            </a>
+
+            <a href="adventure-styles.html#families" class="style-card family-card"> 
+                <h3 class="card-title">Families</h3>
+                <p class="card-description">Create lasting memories with safe and exciting adventures.</p>
+            </a>
+
+            <a href="adventure-styles.html#groups" class="style-card group-card"> 
+                <h3 class="card-title">Small Groups</h3>
+                <p class="card-description">Share the journey with friends, new and old.</p>
+            </a>
+
+            <a href="adventure-styles.html#corporate" class="style-card corporate-card"> 
+                <h3 class="card-title">Corporate Retreats</h3>
+                <p class="card-description">Build your team with an unforgettable expedition.</p>
+            </a>
+        </div>
+    </div>
+</section>
+<section class="seasonal-adventures content-section">
+    <div class="container">
+        <h2 class="section-title">Seasonal Adventures</h2>
+        
+        <div class="seasonal-grid">
+            
+            <a href="winter.html" class="seasonal-link-wrapper">
+                <div class="seasonal-card" id="winter-expedition">
+                    
+                    <div class="card-bg-slideshow">
+                        <div class="slide slide-1"></div>
+                        <div class="slide slide-2"></div>
+                        <div class="slide slide-3"></div>
+                    </div>
+
+                    <div class="seasonal-content">
+                        <h2>❄️</h2>
+                        <h3>Winter Expeditions</h3>
+                        <p>Frozen lakes, snow-clad passes, and starry nights.</p>
+                        <span class="seasonal-link">Explore Winter</span>
+                    </div>
+                    
+                    </div>
+            </a>
+
+            <a href="summer.html" class="seasonal-link-wrapper">
+                <div class="seasonal-card" id="summer-escape">
+
+                    <div class="card-bg-slideshow">
+                        <div class="slide slide-1"></div>
+                        <div class="slide slide-2"></div>
+                        <div class="slide slide-3"></div>
+                    </div>
+
+                    <div class="seasonal-content">
+                        <h2>☀️</h2>
+                        <h3>Summer Escapes</h3>
+                        <p>Lush valleys, ancient monasteries, and endless skies.</p>
+                        <span class="seasonal-link">Explore Summer</span>
+                    </div>
+                    
+                    </div>
+            </a>
+        </div>
+        
+    </div>
+    <div class="section-cta-container">
+            <a href="all-tours.html" class="cta-button">See All Guided Tours</a>
+        </div>
+        </div>
+</section>
+<section class="upcoming-tours content-section">
+        <div class="container">
+            <h2 class="section-title">Upcoming Guided Tours</h2>
+            
+            <div class="tour-slider-container">
+                <div class="tour-slider-wrapper" id="tour-slider">
+
+                      <div class="tour-card">
+                        <div class="tour-card-image">
+                            <img src="assets/Ladakh.jpg" alt="Ladakh">
+                        </div>
+                        <div class="tour-card-content">
+                            <h3>Classic Ladakh</h3>
+                            <p class="tour-subtitle">THE LAND OF HIGH PASSES</p>
+                            <div class="tour-stats">
+                                <div class="stat-item">
+                                    <img src="assets/icons/icon-journey.png" alt="Journey" style="width:28px; height:28px; margin-bottom: 0.5rem;">
+                                    <span>1200 KM</span>
+                                </div>
+                                <div class="stat-item">
+                                    <img src="assets/icons/icon-speed.png" alt="Difficulty" style="width:28px; height:28px; margin-bottom: 0.5rem;">
+                                    <span>Moderate</span>
+                                </div>
+                                <div class="stat-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                    <span>10D / 9N</span>
+                                </div>
+                            </div>
+                            <a href="ladakh.html" class="tour-card-cta">See this trip</a>
+                        </div>
+                    </div>
+
+
+                    <div class="tour-card">
+                        <div class="tour-card-image">
+                            <img src="assets/zanskar.jpg" alt="Zanskar Valley">
+                        </div>
+                        <div class="tour-card-content">
+                            <h3>Zanskar Valley</h3>
+                            <p class="tour-subtitle">THE LAND OF WHITE COPPER</p>
+                            <div class="tour-stats">
+                                <div class="stat-item">
+                                    <img src="assets/icons/icon-journey.png" alt="Journey" style="width:28px; height:28px; margin-bottom: 0.5rem;">
+                                    <span>1450 KM</span>
+                                </div>
+                                <div class="stat-item">
+                                    <img src="assets/icons/icon-speed.png" alt="Difficulty" style="width:28px; height:28px; margin-bottom: 0.5rem;">
+                                    <span>Moderate</span>
+                                </div>
+                                <div class="stat-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                    <span>11D / 10N</span>
+                                </div>
+                            </div>
+                            <a href="zansk.html" class="tour-card-cta">See this trip</a>
+                        </div>
+                    </div>
+
+                    <div class="tour-card">
+                        <div class="tour-card-image">
+                            <img src="assets/Key.jpg" alt="Spiti Valley">
+                        </div>
+                        <div class="tour-card-content">
+                            <h3>Winter Spiti</h3>
+                            <p class="tour-subtitle">THE MIDDLE LAND</p>
+                            <div class="tour-stats">
+                                <div class="stat-item">
+                                    <img src="assets/icons/icon-journey.png" alt="Journey" style="width:28px; height:28px; margin-bottom: 0.5rem;">
+                                    <span>1000 KM</span>
+                                </div>
+                                <div class="stat-item">
+                                    <img src="assets/icons/icon-speed.png" alt="Difficulty" style="width:28px; height:28px; margin-bottom: 0.5rem;">
+                                    <span>Moderate</span>
+                                </div>
+                                <div class="stat-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                    <span>9D / 8N</span>
+                                </div>
+                            </div>
+                            <a href="spiti.html" class="tour-card-cta">See this trip</a>
+                        </div>
+                    </div>
+
+                    <div class="tour-card">
+                        <div class="tour-card-image">
+                            <img src="assets/pangi.jpg" alt="Pangi Valley">
+                        </div>
+                        <div class="tour-card-content">
+                            <h3>Pangi Valley</h3>
+                            <p class="tour-subtitle">CHALLENGE THE UNKNOWN</p>
+                            <div class="tour-stats">
+                                <div class="stat-item">
+                                    <img src="assets/icons/icon-journey.png" alt="Journey" style="width:28px; height:28px; margin-bottom: 0.5rem;">
+                                    <span>900 KM</span>
+                                </div>
+                                <div class="stat-item">
+                                    <img src="assets/icons/icon-speed.png" alt="Difficulty" style="width:28px; height:28px; margin-bottom: 0.5rem;">
+                                    <span>Hard</span>
+                                </div>
+                                <div class="stat-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                    <span>8D / 7N</span>
+                                </div>
+                            </div>
+                            <a href="pangi-tour.html" class="tour-card-cta">See this trip</a>
+                        </div>
+                    </div>
+
+                  
+                </div>
+                
+                <button class="slider-nav prev" id="tour-prev">&#10094;</button>
+                <button class="slider-nav next" id="tour-next">&#10095;</button>
+
+            </div>
+        </div>
+    </section>
+    <section class="why-choose-us content-section">
+    <div class="container">
+        <h2 class="section-title">Why HiMoto Tours?</h2>
+        <div class="features-grid">
+
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                </div> 
+                <h4>Expert Local Guides & Mechanics</h4>
+                <p>Our team lives and breathes the Himalayas, ensuring your safety and showing you hidden gems.</p>
+            </div>
+
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+                        <line x1="8" y1="2" x2="8" y2="18"></line>
+                        <line x1="16" y1="6" x2="16" y2="22"></line>
+                    </svg>
+                </div>
+                <h4>Custom Itineraries & Flexible Routes</h4>
+                <p>Your journey, your rules. We design trips that match your pace, interests, and budget.</p>
+            </div>
+
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                </div>
+                <h4>Premium Stays & Safety Support</h4>
+                <p>From cozy homestays to luxury hotels, we prioritize your comfort. Full safety backup included.</p>
+            </div>
+
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                </div>
+                <h4>Authentic Cultural Experiences</h4>
+                <p>Go beyond the tourist trail. Share a meal with a local family or visit a remote monastery.</p>
+            </div>
+
+        </div>
+    </div>
+</section>
+<section class="gallery-section content-section">
+  <div class="container">
+    <h2 class="section-title">Gallery</h2>
+    <p class="section-intro">Moments from the mountains — captured live.</p>
+
+    <div class="gallery-grid">
+      <img src="assets/bg2.jpg" alt="" class="gallery-item tall">
+      
+      <img src="assets/sta.jpg" alt="" class="gallery-item tall">
+      <img src="assets/bridge.jpg" alt="" class="gallery-item wide">
+      <img src="assets/bike.png" alt="" class="gallery-item">
+      <img src="assets/atal.png" alt="" class="gallery-item">
+      <img src="assets/temp.jpg" alt="" class="gallery-item wide">
+      
+    </div>
+
+  
+
+    <h3 class="section-subtitle">Epic Ride Moments – RAW</h3>
+
+<div class="reels-row">
+  <div class="reel">
+    <video src="assets/gallery/vid3.mp4" muted autoplay loop playsinline></video>
+  </div>
+  <div class="reel">
+    <video src="assets/gallery/vid2.mp4" muted autoplay loop playsinline></video>
+  </div>
+    
+   <div class="reel">
+    <video src="assets/gallery/vid4.mp4" muted autoplay loop playsinline></video>
+  </div>
+   <div class="reel">
+    <video src="assets/gallery/vid7.mp4" muted autoplay loop playsinline></video>
+  </div>
+  <div class="reel">
+    <video src="assets/gallery/vid6.mp4" muted autoplay loop playsinline></video>
+  </div>
+  <div class="reel">
+    <video src="assets/Drone_aerial_shot_Cinematic_l.mp4" muted autoplay loop playsinline></video>
+  </div>
+</div>
+
+
+</section>
+
+    
+    </main>
+
+    <footer class="main-footer">
+        <div class="container footer-container">
+            <div class="footer-branding">
+                <h3>HiMoto Tours</h3>
+                <p>Discover the Soul of the Himalayas.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="adventure-bikes.html">Bikes</a></li>
+                    <li><a href="4x4-cars.html">4x4 Cars</a></li>
+                    <li><a href="#contact">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-social">
+                <h4>Follow Us</h4>
+                <a href="#">Instagram</a>
+                <a href="#">Facebook</a>
+                <a href="#">YouTube</a>
+            </div>
+            <div class="footer-contact">
+                <h4>Get in Touch</h4>
+                <a href="mailto: "> </a>
+                <p>Manali, Himachal Pradesh, India</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 HiMoto Tours. All rights reserved.</p>
+        </div>
+    </footer>
+<a href="https://wa.me/919459028853?text=Hi%20I%20want%20to%20inquire%20about" 
+class="booknow-float" target="_blank">
+    Book Now
+</a>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const slider = document.getElementById('tour-slider');
+            const prevBtn = document.getElementById('tour-prev');
+            const nextBtn = document.getElementById('tour-next');
+
+            if (slider) {
+                // Function to scroll
+                const scrollSlider = (amount) => {
+                    // We calculate the scroll amount based on the slider's visible width.
+                    // Scrolling by 80% of the width feels natural.
+                    const scrollAmount = (slider.offsetWidth * 0.8) * amount;
+                    slider.scrollBy({
+                        left: scrollAmount,
+                        behavior: 'smooth'
+                    });
+                };
+
+                // Event Listeners
+                nextBtn.addEventListener('click', () => {
+                    scrollSlider(1); // Scroll right
+                });
+
+                prevBtn.addEventListener('click', () => {
+                    scrollSlider(-1); // Scroll left
+                });
+            }
+        });
+    
+const btn = document.getElementById('mobileMenuBtn')
+const menu = document.getElementById('mobileMenu')
+
+btn.addEventListener('click', ()=>{
+    menu.classList.toggle('show')
+})
+</script>
+
+    </body>
+</html>

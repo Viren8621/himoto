@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Your Style – HiMoto Tours</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Oswald:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="pages.css">
+    
+    <style>
+        /* === Hero for Static Pages === */
+        .hero-static {
+            height: 50vh;
+            min-height: 400px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background-image: linear-gradient(rgba(14, 29, 42, 0.6), rgba(14, 29, 42, 0.6)), url('assets/bg13.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #fff;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        .hero-title {
+            font-size: 3.5rem;
+            color: #fff;
+            font-weight: 700;
+        }
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: rgba(255,255,255,0.9);
+            font-family: 'Lato', sans-serif;
+            font-weight: 400;
+        }
+
+        /* === Styles for New Detail Sections (Reusing from adventure-styles) === */
+        /* You might want to move these to pages.css if you have many such pages */
+        .detail-section {
+            padding: 5rem 0;
+        }
+        .detail-section:nth-of-type(odd) {
+             background: #fff;
+        }
+        .detail-section:nth-of-type(even) {
+            background: var(--background-color); /* f6f7f9 */
+        }
+        
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .detail-grid.reverse {
+            grid-template-areas: "text image";
+        }
+        .detail-grid:not(.reverse) {
+            grid-template-areas: "image text";
+        }
+        .detail-grid .detail-image {
+             grid-area: image;
+        }
+        .detail-grid .detail-content {
+            grid-area: text;
+        }
+
+        .detail-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .detail-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-color);
+        }
+        .detail-content p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+        .detail-content ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .detail-content li {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 1rem;
+            font-size: 1.05rem;
+            font-weight: 700;
+        }
+        .detail-content li::before {
+            content: '✓'; 
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--accent-color);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .hero-title { font-size: 2.5rem; }
+            .detail-grid,
+            .detail-grid.reverse {
+                grid-template-columns: 1fr;
+                grid-template-areas: "image" "text"; /* Stack them */
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="main-header main-header-static scrolled">
+        <nav class="navbar">
+            <div class="nav-logo">
+                <a href="index.html">HiMoto Tours</a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="adventure-styles.html">Tour Styles</a></li>
+                <li><a href="vehicle-styles.html" class="active">Vehicle Types</a></li>
+            </ul>
+            <a href="https://wa.me/919459028853?text=Hi%20I%20want%20to%20inquire%20about%20a%20Himalayan%20tour" class="cta-button nav-cta" target="_blank">
+                Plan Your Trip
+            </a>
+        </nav>
+    </header>
+
+    <main>
+
+        <section class="hero-static">
+            <div class="hero-content">
+                <h1 class="hero-title">Explore Your Ride</h1>
+                <p class="hero-subtitle">From solo thrills to group comfort, travel in your own style.</p>
+            </div>
+        </section>
+
+   
+
+        <section class="detail-section" id="bikes">
+            <div class="detail-grid">
+                <div class="detail-image">
+                    <img src="assets/Royal-Enfield-Himalayan.jpg" alt="Royal Enfield Himalayan motorcycle in the mountains">
+                </div>
+                <div class="detail-content">
+                    <h2>Adventure Bikes</h2>
+                    <p>Experience the raw beauty of the Himalayas on the iconic Royal Enfield Himalayan. These tours are designed for true adventurers seeking the thrill of navigating challenging terrains and high mountain passes on two wheels. Our bikes are meticulously maintained and equipped for the journey.</p>
+                    <ul>
+                        <li>Robust Royal Enfield Himalayan bikes for all terrains.</li>
+                        <li>Experienced lead riders and support staff.</li>
+                        <li>Mechanic with spare parts on all tours.</li>
+                        <li>Ideal for solo riders or small groups of experienced bikers.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="detail-section" id="cars">
+            <div class="detail-grid reverse">
+                <div class="detail-image">
+                    <img src="assets/4X4.png" alt="4x4 SUV driving through a mountain landscape">
+                </div>
+                <div class="detail-content">
+                    <h2>4x4 Cars</h2>
+                    <p>For those who prefer comfort without compromising on adventure, our 4x4 car tours offer the perfect solution. Travel in rugged yet comfortable vehicles, driven by experienced local drivers who know the mountain roads inside out. Ideal for families, couples, or anyone seeking a relaxed pace.</p>
+                    <ul>
+                        <li>Comfortable and reliable 4x4 vehicles (e.g., Mahindra Thar, Scorpio).</li>
+                        <li>Professional, safe, and knowledgeable local drivers.</li>
+                        <li>Enjoy panoramic views from the comfort of your seat.</li>
+                        <li>Access remote locations without the physical demands of biking.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="detail-section" id="campervans">
+            <div class="detail-grid">
+                <div class="detail-image">
+                    <img src="assets/campervan.jpg" alt="Campervan parked by a lake with a person enjoying the view">
+                </div>
+                <div class="detail-content">
+                    <h2>Campervans</h2>
+                    <p>Take your home with you on the road with our fully equipped campervans. Perfect for ultimate freedom and flexibility, these vehicles allow you to choose your own campsite under the stars, wake up to breathtaking views, and explore off the beaten path at your leisure.</p>
+                    <ul>
+                        <li>Integrated kitchen, sleeping areas, and basic amenities.</li>
+                        <li>Freedom to design your own itinerary and overnight stops.</li>
+                        <li>Perfect for couples or small families seeking independence.</li>
+                        <li>A unique and immersive way to experience nature.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="detail-section" id="minibuses">
+            <div class="detail-grid reverse">
+                <div class="detail-image">
+                    <img src="assets/bus.png" alt="Mini bus traveling through a scenic mountain road">
+                </div>
+                <div class="detail-content">
+                    <h2>Mini Buses</h2>
+                    <p>For larger groups, clubs, or corporate teams, our mini-bus options provide comfortable and efficient transport for your entire expedition. With ample space for passengers and luggage, you can journey together, share the experience, and leave the driving to our professional team.</p>
+                    <ul>
+                        <li>Spacious and comfortable mini-buses for larger groups.</li>
+                        <li>Professional and experienced drivers for safe travel.</li>
+                        <li>Cost-effective solution for group travel.</li>
+                        <li>Ideal for custom tours, events, or private group adventures.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="main-footer">
+        <div class="container footer-container">
+            <div class="footer-branding">
+                <h3>HiMoto Tours</h3>
+                <p>Discover the Soul of the Himalayas.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="adventure-styles.html">Tour Styles</a></li>
+                    <li><a href="vehicle-styles.html">Vehicle Types</a></li>
+                </ul>
+            </div>
+            <div class="footer-social">
+                <h4>Follow Us</h4>
+                <a href="#">Instagram</a>
+                <a href="#">Facebook</a>
+                <a href="#">YouTube</a>
+            </div>
+            <div class="footer-contact">
+                <h4>Get in Touch</h4>
+                <a href="mailto: "> </a>
+                <p>Manali, Himachal Pradesh, India</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 HiMoto Tours. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/919459028853?text=Hi%20I%20want%20to%20inquire%20about" 
+    class="booknow-float" target="_blank">
+        Book Now
+    </a>
+
+</body>
+</html>

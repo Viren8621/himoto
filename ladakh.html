@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classic Ladakh: Land of High Passes – HiMoto Tours</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="pages.css">
+    
+    <style>
+        /* === NEW HERO SLIDESHOW STYLES === */
+        .hero-slideshow {
+            position: relative;
+            width: 100%;
+            height: 70vh; /* You can adjust this height */
+            overflow: hidden;
+            background: #222;
+        }
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .slide.active {
+            opacity: 1;
+        }
+        /* Dark overlay for text readability */
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1;
+        }
+        /* Ensure hero content is on top of the overlay */
+       .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            color: #fff; /* This will make all text white by default */
+        }
+
+        .hero-title {
+             /* Your existing hero-title styles */
+             color: #fff; /* Explicitly set to white */
+        }
+        
+        .hero-subtitle {
+            color: #fff; /* Or color: white; */
+            font-size: 1.25rem; /* Example: adjust as needed */
+            font-weight: 400;   /* Example: adjust as needed */
+        }
+        /* Slideshow Navigation */
+        .slide-nav {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            padding: 1rem 1.5rem;
+            font-size: 2rem;
+            font-weight: bold;
+            border: none;
+            user-select: none;
+            transition: background 0.3s ease;
+        }
+        .slide-nav:hover {
+            background: rgba(0, 0, 0, 0.6);
+        }
+        .slide-nav.prev {
+            left: 0;
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+        .slide-nav.next {
+            right: 0;
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+        }
+        /* === END HERO SLIDESHOW STYLES === */
+
+
+        /* Styles for the Tour Stats Grid */
+        .tour-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); 
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto 2.5rem auto;
+            padding: 2rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        @media (max-width: 900px) {
+            .tour-stats-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        @media (max-width: 500px) {
+            .tour-stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+       .stat-item {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+        
+        /* This is the main fix: styles now target <img> */
+        .stat-icon img {
+            width: 36px;   /* Or your preferred size */
+            height: 36px;  /* Or your preferred size */
+            object-fit: contain;
+            margin-bottom: 0.75rem; /* Space between icon and label */
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #777; /* Lighter color, like screenshot */
+            display: block;
+            margin-bottom: 0.25rem; /* Tighter gap */
+        }
+        
+        .stat-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #333; /* Darker color for value */
+        }
+
+        /* Styles for Tabbed Interface */
+        .tabs-container {
+            display: flex;
+            flex-wrap: wrap; 
+            border-bottom: 2px solid #eee;
+            margin-bottom: 1.5rem;
+        }
+        .tab-button {
+            padding: 0.75rem 1.25rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #777;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px; 
+        }
+        .tab-button.active {
+            color: #c0392b;
+            border-bottom-color: #c0392b;
+            font-weight: 700;
+        }
+        .tab-content {
+            display: none; 
+        }
+        .tab-content.active {
+            display: block; 
+        }
+        .tab-content h3 {
+            margin-top: 0;
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+        .tab-content ul {
+            padding-left: 20px;
+        }
+        .tab-content li {
+            margin-bottom: 0.75rem;
+        }
+
+        
+        /* Accordion Styles for Itinerary */
+        .day-accordion {
+            border-bottom: 1px solid #eee;
+        }
+        .day-accordion:last-child {
+            border-bottom: none;
+        }
+        .day-accordion-toggle {
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            padding: 1.25rem 1rem;
+            font-size: 1.1rem;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 500;
+            color: #333;
+            transition: background 0.3s ease;
+        }
+        .day-accordion-toggle:hover {
+            background: #f9f9f9;
+        }
+        .day-accordion-toggle strong {
+            color: #c0392b;
+            margin-right: 0.5rem;
+            font-size: 1.15rem;
+        }
+        .toggle-icon {
+            font-size: 1.75rem;
+            font-weight: 300;
+            color: #c0392b;
+            transition: transform 0.3s ease;
+        }
+        .day-accordion-toggle.active .toggle-icon {
+           transform: rotate(45deg);
+        }
+        
+        .day-accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+            background: #fafafa;
+        }
+        .day-accordion-content-inner {
+            padding: 0 1.5rem 1.5rem 1.5rem;
+        }
+        .day-accordion-content-inner p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            padding-top: 1rem;
+            border-top: 1px dashed #ddd;
+        }
+        .day-accordion-content-inner .day-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            font-size: 0.95rem;
+        }
+         .day-accordion-content-inner .day-meta span {
+            color: #333;
+        }
+        .day-accordion-content-inner .day-meta strong {
+            color: #000;
+        }
+
+
+        /* Styles for "Why Us" Sidebar Card */
+        .sidebar-why-us {
+            background: #fff;
+            padding: 1.5rem;
+            border: 1px solid #eee;
+            border-left: 4px solid #c0392b; 
+            margin-bottom: 1.5rem;
+        }
+        .sidebar-why-us h4 {
+            margin-top: 0;
+            font-size: 1.25rem;
+            color: #333;
+        }
+        .sidebar-why-us ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .sidebar-why-us li {
+            position: relative;
+            padding-left: 28px;
+            margin-bottom: 0.75rem;
+            color: #555;
+        }
+        .sidebar-why-us li::before {
+            content: '✓'; 
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: #c0392b;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        .enquire-now-cta {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            background: #c0392b;
+            color: #fff;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: 5px;
+            margin-top: 1.5rem;
+        }
+        .enquire-now-cta:hover {
+            background: #a93226;
+        }/* NEW RESPONSIVE GALLERY CSS */
+.gallery-grid {
+  display: grid;
+  /* I've used your 0.5rem gap from the inline style */
+  gap: 0.5rem; 
+  max-width: 1200px;
+  margin: 2rem auto;
+  /* I've added the padding-bottom from your inline style */
+  padding-bottom: 5rem; 
+  
+  /* This is the best responsive setting: 
+      It creates as many 200px+ columns as can fit */
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  /* Matched border-radius to your gap for a clean look */
+  border-radius: 0.5rem; 
+}
+
+/* MOBILE: Force 2 columns */
+@media(max-width:600px){
+  .gallery-grid {
+    /* This ensures a clean 2-column layout on small phones */
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.gallery-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem; /* Or your preferred size */
+  font-weight: 700;
+  color: #333;       /* A dark, readable color */
+  text-align: center;
+  margin-top: 3rem;   /* Adds space above the title */
+  margin-bottom: 2rem; /* Adds space between the title and the images */
+}
+
+/* Makes the title a bit smaller on mobile */
+@media (max-width: 768px) {
+  .gallery-title {
+    font-size: 2rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+        /* MOBILE TAB STYLES */
+        @media (max-width: 768px) {
+            .tabs-container {
+                flex-direction: column;
+                gap: 0.5rem;
+                border-bottom: none;
+                margin-bottom: 2rem;
+            }
+            .tab-button {
+                background: #fff;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                text-align: center;
+                color: #c0392b;
+                font-weight: 700;
+                padding: 0.85rem 1rem;
+                border-bottom: 1px solid #ddd; 
+                margin-bottom: 0;
+            }
+            .tab-button.active {
+                background: #c0392b;
+                color: #fff;
+                border-color: #c0392b;
+                border-bottom-color: #c0392b;
+            }
+            
+            .page-content-grid {
+                grid-template-columns: 1fr; 
+            }
+            .page-sidebar {
+                margin-top: 2.5rem;
+            }
+        }
+    </style>
+
+    <script src="animations.js" defer></script>
+</head>
+<body>
+
+   <header class="main-header main-header-static">
+
+    <nav class="navbar">
+        <div class="nav-logo">
+            <a href="index.html">HiMoto Tours</a>
+        </div>
+
+        <button class="nav-toggle" id="mobileMenuBtn">
+            <span></span><span></span><span></span>
+        </button>
+
+        <ul class="nav-menu" id="mobileMenu">
+            <li><a href="index.html" class="active">Home</a></li>
+            <li><a href="all-tours.html" >All Tours</a></li>
+            <li><a href="adventure-styles.html">Tour Styles</a></li>
+            <li><a href="vehicle-styles.html">Vehicle Types</a></li>
+        </ul>
+
+        <a href="https://wa.me/919459028853?text=Hi%20I%20want%20to%20inquire%20about%20a%20Himalayan%20tour" class="cta-button nav-cta" target="_blank">
+            Plan Your Trip
+        </a>
+    </nav>
+</header>
+
+    <main>
+
+        <section class="hero-slideshow">
+            <div class="slides-container">
+                
+                <div class="slide active" style="background-image: url('assets/ladakh/2.jpg');">
+                    <div class="hero-content">
+                        <h1 class="hero-title">Ride to the Roof of the World</h1>
+                        <p class="hero-subtitle">Conquer Khardung La, one of the world's highest motorable passes.</p>
+                    </div>
+                </div>
+                
+                <div class="slide" style="background-image: url('assets/ladakh/1.jpg');">
+                    <div class="hero-content">
+                        <h1 class="hero-title">The Lake of Changing Colors</h1>
+                        <p class="hero-subtitle">Camp beside the stunning, high-altitude Pangong Tso Lake.</p>
+                    </div>
+                </div>
+                
+                <div class="slide" style="background-image: url('assets/ladakh/3.jpg');">
+                    <div class="hero-content">
+                        <h1 class="hero-title">The Ultimate Himalayan Quest</h1>
+                        <p class="hero-subtitle">Experience the magic of Nubra Valley's sand dunes and ancient monasteries.</p>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <button class="slide-nav prev" id="slide-prev">&#10094;</button>
+            <button class="slide-nav next" id="slide-next">&#10095;</button>
+        </section>
+        
+        <section class="tour-stats-wrapper">
+            <div class="container">
+                <div class="tour-stats-grid">
+                    
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <img src="assets/icons/icon-days.png" alt="Days">
+                        </div>
+                        <span class="stat-label">Days</span>
+                        <span class="stat-value">10D / 9N</span>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                             <img src="assets/icons/icon-journey.png" alt="Journey">
+                        </div>
+                        <span class="stat-label">Journey</span>
+                        <span class="stat-value">~1200 KM</span>
+                    </div>
+
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <img src="assets/icons/icon-motorcycle.png" alt="Motorcycle">
+                        </div>
+                        <span class="stat-label">Motorcycle</span>
+                        <span class="stat-value">Royal Enfield Himalayan 411cc</span>
+                    </div>
+
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <img src="assets/icons/icon-altitude.png" alt="Max Riding Altitude">
+                        </div>
+                        <span class="stat-label">Max Riding Alt</span>
+                        <span class="stat-value">5359m</span>
+                    </div>
+
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                           <img src="assets/icons/icon-sleeping.png" alt="Max Sleeping Altitude">
+                        </div>
+                        <span class="stat-label">Max Sleeping Alt</span>
+                        <span class="stat-value">4250m</span>
+                    </div>
+
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <img src="assets/icons/icon-skills.png" alt="Riding Skills">
+                        </div>
+                        <span class="stat-label">Riding Skills</span>
+                        <span class="stat-value">Moderate</span>
+                    </div>
+
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <img src="assets/icons/icon-season.png" alt="Best Season">
+                        </div>
+                        <span class="stat-label">Best Season</span>
+                        <span class="stat-value">June to Sept</span>
+                    </div>
+
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <img src="assets/icons/icon-group.png" alt="Group Size">
+                        </div>
+                        <span class="stat-label">Group Size</span>
+                        <span class="stat-value">20</span>
+                    </div>
+
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <img src="assets/icons/icon-fly-in.png" alt="Fly In">
+                        </div>
+                        <span class="stat-label">Fly In</span>
+                        <span class="stat-value">Leh (IXL)</span>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <img src="assets/icons/icon-fly-out.png" alt="Fly Out">
+                        </div>
+                        <span class="stat-label">Fly Out</span>
+                        <span class="stat-value">Leh (IXL)</span>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+        <section class="page-content content-section">
+            <div class="container">
+                <div class="page-content-grid">
+                    
+                    <div class="page-main-content">
+                        <div class="tabs-container">
+                            <button class="tab-button active" data-tab="about">About</button>
+                            <button class="tab-button" data-tab="plan">Tour Plan</button>
+                            <button class="tab-button" data-tab="pricing">Pricing & Dates</button>
+                            <button class="tab-button" data-tab="includes">Inclusions</button>
+                            <button class="tab-button" data-tab="faq">FAQs</button>
+                        </div>
+
+                        <div id="about" class="tab-content active">
+                            <h3>Tour Highlights</h3>
+                            <p>This is the bucket-list Himalayan adventure. Our 10-day Classic Ladakh tour is designed for those who want to experience all the iconic locations of this magical land. Flying into Leh gives us more time to explore the heart of Ladakh, with a focus on proper acclimatization and maximum adventure.</p>
+                            <ul>
+                                <li>Fly into Leh (3,500m) with the first two days dedicated to acclimatization.</li>
+                                <li>Ride to the top of **Khardung La (5,359m)**, one of the world's highest motorable passes.</li>
+                                <li>Explore the high-altitude desert of **Nubra Valley** and ride a Bactrian (double-humped) camel.</li>
+                                <li>Visit the 14th-century Diskit Monastery and its giant Maitreya Buddha statue.</li>
+                                <li>Camp on the shores of the breathtaking, color-changing **Pangong Tso Lake**.</li>
+                                <li>Cross the mighty **Chang La Pass (5,360m)**.</li>
+                                <li>Visit the famous monasteries of the Indus Valley: Thiksey, Hemis, and Shey.</li>
+                                <li>Experience the unique culture and warm hospitality of the Ladakhi people.</li>
+                            </ul>
+                            <p>This tour combines moderate riding with incredible cultural experiences, making it the perfect first-time expedition to the high Himalayas.</p>
+                        </div>
+
+                        <div id="plan" class="tab-content">
+                            <h3>Detailed Itinerary</h3>
+                            
+                            <div class="day-accordion">
+                                <button class="day-accordion-toggle">
+                                    <span><strong>Day 01:</strong> Arrive in Leh</span>
+                                    <span class="toggle-icon">+</span>
+                                </button>
+                                <div class="day-accordion-content">
+                                    <div class="day-accordion-content-inner">
+                                        <p>Julley! Welcome to Leh. You will be picked up from Leh Airport (IXL) and transferred to our hotel. The day is for complete rest. This is critical for acclimatization to the high altitude (3,500m). In the evening, we'll have our group briefing, introductions, and bike allocation.</p>
+                                        <div class="day-meta">
+                                            <span><strong>Accommodation:</strong> Deluxe Hotel</span>
+                                            <span><strong>Meals:</strong> Dinner</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="day-accordion">
+                                <button class="day-accordion-toggle">
+                                    <span><strong>Day 02:</strong> Leh Acclimatization & Local Ride</span>
+                                    <span class="toggle-icon">+</span>
+                                </button>
+                                <div class="day-accordion-content">
+                                    <div class="day-accordion-content-inner">
+                                        <p>After breakfast, we'll take a short "warm-up" ride around Leh to get comfortable with the bikes. We'll visit Shanti Stupa, Leh Palace, and the Hall of Fame. This short ride helps with acclimatization and allows you to flag any issues with your motorcycle. Evening free to explore Leh market.</p>
+                                        <div class="day-meta">
+                                            <span><strong>Accommodation:</strong> Deluxe Hotel</span>
+                                            <span><strong>Meals:</strong> Breakfast and Dinner</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="day-accordion">
+                                <button class="day-accordion-toggle">
+                                    <span><strong>Day 03:</strong> Leh - Sham Valley (Magnetic Hill & Sangam)</span>
+                                    <span class="toggle-icon">+</span>
+                                </button>
+                                <div class="day-accordion-content">
+                                    <div class="day-accordion-content-inner">
+                                        <p>Our first proper ride. We head out on the Leh-Srinagar highway. We'll visit the Gurudwara Pathar Sahib, experience the gravity-defying Magnetic Hill, and witness the stunning confluence (Sangam) of the Indus and Zanskar rivers. We'll also visit the Alchi Monastery before riding back to Leh.</p>
+                                        <div class="day-meta">
+                                            <span><strong>Accommodation:</strong> Deluxe Hotel</span>
+                                            <span><strong>Meals:</strong> Breakfast and Dinner</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="day-accordion">
+                                <button class="day-accordion-toggle">
+                                    <span><strong>Day 04:</strong> Leh - Khardung La - Nubra Valley (160 KM / 5-6 Hrs)</span>
+                                    <span class="toggle-icon">+</span>
+                                </button>
+                                <div class="day-accordion-content">
+                                    <div class="day-accordion-content-inner">
+                                        <p>The day you've been waiting for! We ride to the top of Khardung La (5,359m), the gateway to the Shyok and Nubra valleys. After celebrating at the top, we descend into the Nubra Valley, a stunning high-altitude desert. We'll reach our camp/hotel in Hunder and visit the famous sand dunes for a camel ride.</p>
+                                        <div class="day-meta">
+                                            <span><strong>Accommodation:</strong> Deluxe Camp / Hotel</span>
+                                            <span><strong>Meals:</strong> Breakfast and Dinner</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="day-accordion">
+                                <button class="day-accordion-toggle">
+                                    <span><strong>Day 05:</strong> Nubra Valley (Hunder & Diskit)</span>
+                                    <span class="toggle-icon">+</span>
+                                </button>
+                                <div class="day-accordion-content">
+                                    <div class="day-accordion-content-inner">
+                                        <p>A relaxed day exploring Nubra. We'll visit the 14th-century Diskit Monastery and its 106-foot tall Maitreya Buddha statue, which offers panoramic views of the valley. You can also opt for an optional ride to the border village of Turtuk (requires an early start).</p>
+                                        <div class="day-meta">
+                                            <span><strong>Accommodation:</strong> Deluxe Camp / Hotel</span>
+                                            <span><strong>Meals:</strong> Breakfast and Dinner</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="day-accordion">
+                                <button class="day-accordion-toggle">
+                                    <span><strong>Day 06:</strong> Nubra Valley - Pangong Tso (150 KM / 6-7 Hrs)</span>
+                                    <span class="toggle-icon">+</span>
+                                </button>
+                                <div class="day-accordion-content">
+                                    <div class="day-accordion-content-inner">
+                                        <p>We ride along the remote and beautiful Shyok River road, a stunning route connecting Nubra directly to Pangong. The landscape is dramatic and ever-changing. We'll arrive at the magnificent Pangong Tso Lake (4,250m) by late afternoon, just in time to see its colors change with the setting sun.</p>
+                                        <div class="day-meta">
+                                            <span><strong>Accommodation:</strong> Deluxe Camp</span>
+                                            <span><strong>Meals:</strong> Breakfast and Dinner</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="day-accordion">
+                                <button class="day-accordion-toggle">
+                                    <span><strong>Day 07:</strong> Pangong Tso - Leh (160 KM / 5-6 Hrs)</span>
+                                    <span class="toggle-icon">+</span>
+                                </button>
+                                <div class="day-accordion-content">
+                                    <div class="day-accordion-content-inner">
+                                        <p>Waking up to the serene beauty of Pangong Lake is unforgettable. After breakfast, we start our ride back to Leh. This time, we cross the mighty Chang La Pass (5,360m). We'll be back in Leh by the afternoon, with time to relax and rest.</p>
+                                        <div class="day-meta">
+                                            <span><strong>Accommodation:</strong> Deluxe Hotel</span>
+                                            <span><strong>Meals:</strong> Breakfast and Dinner</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="day-accordion">
+                                <button class="day-accordion-toggle">
+                                    <span><strong>Day 08:</strong> Leh - Monastery Tour (Thiksey & Hemis)</span>
+                                    <span class="toggle-icon">+</span>
+                                </button>
+                                <div class="day-accordion-content">
+                                    <div class="day-accordion-content-inner">
+                                        <p>Today we explore the cultural heart of Ladakh. We ride to two of the most famous monasteries: Thiksey (a mini-Potala Palace) and Hemis (the largest and wealthiest monastery in Ladakh). We'll also visit the Shey Palace. It's a day of culture and beautiful riding along the Indus River.</p>
+                                        <div class="day-meta">
+                                            <span><strong>Accommodation:</strong> Deluxe Hotel</span>
+                                            <span><strong>Meals:</strong> Breakfast and Dinner</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="day-accordion">
+                                <button class="day-accordion-toggle">
+                                    <span><strong>Day 09:</strong> Leh Buffer Day & Farewell Dinner</span>
+                                    <span class="toggle-icon">+</span>
+                                </button>
+                                <div class="day-accordion-content">
+                                    <div class="day-accordion-content-inner">
+                                        <p>We keep this day as a buffer for any weather delays or as a free day for you to explore, shop for souvenirs, or simply relax. You could also opt for a thrilling white-water rafting trip on the Zanskar River (at extra cost). In the evening, we host our grand farewell dinner to celebrate our incredible journey.</p>
+                                        <div class="day-meta">
+                                            <span><strong>Accommodation:</strong> Deluxe Hotel</span>
+                                            <span><strong>Meals:</strong> Breakfast and Dinner</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="day-accordion">
+                                <button class="day-accordion-toggle">
+                                    <span><strong>Day 10:</strong> Depart from Leh</span>
+                                    <span class="toggle-icon">+</span>
+                                </button>
+                                <div class="day-accordion-content">
+                                    <div class="day-accordion-content-inner">
+                                        <p>After breakfast, our team will transfer you to Leh Airport (IXL) for your flight home. You leave with incredible memories, photos, and the spirit of the high Himalayas. Julley!</p>
+                                        <div class="day-meta">
+                                            <span><strong>Accommodation:</strong> NIL</span>
+                                            <span><strong>Meals:</strong> Breakfast</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        
+                        <div id="pricing" class="tab-content">
+                            <h3>Tour Cost & Dates</h3>
+                            <p><strong>Upcoming Dates:</strong></p>
+                            <ul>
+                                <li>June 15th - June 24th</li>
+                                <li>July 10th - July 19th</li>
+                                <li>Aug 5th - Aug 14th</li>
+                                <li>Sept 1st - Sept 10th</li>
+                            </ul>
+                            <p><strong>Price:</strong> ₹42,000 per person (Leh to Leh)</p>
+                            <p><em>(Contact us for custom group dates.)</em></p>
+                        </div>
+
+                        <div id="includes" class="tab-content">
+                            <h3>Inclusions / Exclusions</h3>
+                            <p><strong>What's Included:</strong></p>
+                            <ul>
+                                <li>Airport transfers in Leh.</li>
+                                <li>Accommodation on twin-sharing basis (Hotels, Camps).</li>
+                                <li>All meals (Breakfast, Dinner).</li>
+                                <li>Royal Enfield Himalayan 411cc Motorcycle.</li>
+                                <li>Fuel for the entire trip.</li>
+                                <li>All necessary permits (Inner Line Permits, Ladakh permits).</li>
+                                <li>Backup Vehicle for luggage.</li>
+                                <li>Mechanic and Tour Leader.</li>
+                                <li>Oxygen cylinder for emergencies.</li>
+                            </ul>
+                            <p><strong>What's Not Included:</strong></p>
+                            <ul>
+                                <li>Flights to/from Leh (IXL).</li>
+                                <li>Lunches.</li>
+                                <li>Personal expenses.</li>
+                                <li>Riding Gear (available for rent).</li>
+                                <li>Entry fees for monasteries and monuments.</li>
+                            </ul>
+                        </div>
+                        
+                        <div id="faq" class="tab-content">
+                            <h3>Frequently Asked Questions</h3>
+                            <p><strong>Q: What is the best way to handle acclimatization?</strong></p>
+                            <p>A: Flying into Leh requires at least 24-36 hours of complete rest. Our itinerary includes two nights in Leh before any major pass-crossing, which is the best way to acclimatize. Drink plenty of water and avoid over-exertion.</p>
+                            <p><strong>Q: Is this ride suitable for a pillion?</strong></p>
+                            <p>A: Yes, this tour is very suitable for a pillion rider. The roads are challenging but generally well-paved on the main routes. The "Moderate" rating means it's a good balance of adventure and comfort.</p>
+                        </div>
+                        
+                    </div>
+                    
+                    <aside class="page-sidebar">
+                        <div class="sidebar-why-us">
+                            <h4>Why HiMoto For Ladakh?</h4>
+                            <ul>
+                                <li>10+ Years of Experience</li>
+                                <li>Focus on Acclimatization</li>
+                                <li>Expertly Planned Itineraries</li>
+                                <li>Safety & Security First</li>
+                                <li>Well-Maintained Fleet</li>
+                                <li>Expert Local Guides</li>
+                                <li>Committed to Transparency</li>
+                            </ul>
+                            <a href="https://wa.me/919459028853?text=Hi%20I%20want%20to%20inquire%20about%20the%20Grand%20Ladakh%20Expedition" class="enquire-now-cta" target="_blank">Enquire Now</a>
+                        </div>
+                    </aside>
+
+                </div>
+            </div>
+        </section>
+
+        <section class="photo-gallery">
+            <h2 class="gallery-title">Glimpse of Ladakh</h2>
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="assets/ladakh/1.jpg" alt="Pangong Tso Lake">
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/ladakh/2.jpg" alt="Riders at Khardung La Pass sign">
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/ladakh/3.jpg" alt="Bactrian camels in Nubra Valley">
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/ladakh/4.jpg" alt="Thiksey Monastery">
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/ladakh/5.jpg" alt="Chang La Pass">
+                </div>
+
+                <div class="gallery-item">
+                    <img src="assets/ladakh/7.jpg" alt="Zanskar-Indus Confluence (Sangam)">
+                </div>
+                
+                <div class="gallery-item">
+                    <img src="assets/ladakh/6.jpg" alt="Magnetic Hill road sign">
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/ladakh/8.jpg" alt="Diskit Monastery Maitreya Buddha">
+                </div>
+                
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="main-footer">
+        <div class="container footer-container">
+            <div class="footer-branding">
+                <h3>HiMoto Tours</h3>
+                <p>Discover the Soul of the Himalayas.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="adventure-bikes.html">About Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-social">
+                <h4>Follow Us</h4>
+                <a href="#">Instagram</a>
+                <a href="#">Facebook</a>
+                <a href="#">YouTube</a>
+            </div>
+            <div class="footer-contact">
+                <h4>Get in Touch</h4>
+                <a href="mailto: "> </a>
+                <p>Manali, Himachal Pradesh, India</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 HiMoto Tours. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // --- Script for Tabs ---
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetTab = button.getAttribute('data-tab');
+                    
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+
+                    button.classList.add('active');
+                    document.getElementById(targetTab).classList.add('active');
+                });
+            });
+
+            // --- Accordion Script ---
+            const accordionToggles = document.querySelectorAll('.day-accordion-toggle');
+
+            accordionToggles.forEach(toggle => {
+                toggle.addEventListener('click', () => {
+                    const content = toggle.nextElementSibling;
+                    const icon = toggle.querySelector('.toggle-icon');
+                    const isCurrentlyActive = toggle.classList.contains('active');
+
+                    // Close all other accordions
+                    accordionToggles.forEach(otherToggle => {
+                        if (otherToggle !== toggle) {
+                            otherToggle.classList.remove('active');
+                            otherToggle.nextElementSibling.style.maxHeight = null;
+                            otherToggle.querySelector('.toggle-icon').textContent = '+';
+                        }
+                    });
+
+                    // Toggle the clicked one
+                    if (isCurrentlyActive) {
+                        toggle.classList.remove('active');
+                        content.style.maxHeight = null;
+                        icon.textContent = '+';
+                    } else {
+                        toggle.classList.add('active');
+                        content.style.maxHeight = content.scrollHeight + 'px';
+                        icon.textContent = '–';
+                    }
+                });
+            });
+
+
+            // === NEW SLIDESHOW SCRIPT ===
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('slide-prev');
+            const nextBtn = document.getElementById('slide-next');
+            let currentSlide = 0;
+            let slideInterval;
+
+            function showSlide(n) {
+                // Wrap around
+                if (n >= slides.length) {
+                    currentSlide = 0;
+                } else if (n < 0) {
+                    currentSlide = slides.length - 1;
+                } else {
+                    currentSlide = n;
+                }
+
+                // Hide all slides
+                slides.forEach(slide => {
+                    slide.classList.remove('active');
+                });
+
+                // Show the new current slide
+                slides[currentSlide].classList.add('active');
+            }
+
+            function nextSlide() {
+                showSlide(currentSlide + 1);
+            }
+
+            function prevSlide() {
+                showSlide(currentSlide - 1);
+            }
+
+            function startSlideShow() {
+                // Set an interval to auto-advance the slides
+                slideInterval = setInterval(nextSlide, 7000); // 7 seconds
+            }
+
+            function resetSlideShow() {
+                // Clear the interval and restart it
+                clearInterval(slideInterval);
+                startSlideShow();
+            }
+
+            // Event Listeners
+            if (nextBtn) {
+                nextBtn.addEventListener('click', () => {
+                    nextSlide();
+                    resetSlideShow(); // Reset timer on manual click
+                });
+            }
+
+            if (prevBtn) {
+                prevBtn.addEventListener('click', () => {
+                    prevSlide();
+                    resetSlideShow(); // Reset timer on manual click
+                });
+            }
+
+            // Initial setup
+            showSlide(0);      // Show the first slide
+            startSlideShow();  // Start the auto-rotation
+            // === END SLIDESHOW SCRIPT ===
+
+        });
+    </script>
+<a href="https://wa.me/919459028853?text=Hi%20I%20want%20to%20inquire%20about" 
+class="booknow-float" target="_blank">
+    Book Now
+</a>
+<script>
+    const btn = document.getElementById('mobileMenuBtn')
+const menu = document.getElementById('mobileMenu')
+
+btn.addEventListener('click', ()=>{
+menu.classList.toggle('show')
+})
+</script>
+
+</body>
+</html>

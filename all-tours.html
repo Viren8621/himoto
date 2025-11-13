@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Guided Tours – HiMoto Tours</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Oswald:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* STYLES FOR THIS PAGE */
+
+        /* === Hero for Static Pages === */
+        .hero-static {
+            height: 50vh;
+            min-height: 400px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background-image: linear-gradient(rgba(14, 29, 42, 0.6), rgba(14, 29, 42, 0.6)), url('assets/bg13.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #fff;
+        }
+        .hero-static .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        .hero-static .hero-title {
+            font-size: 3.5rem;
+            color: #fff;
+            font-weight: 700;
+        }
+        .hero-static .hero-subtitle {
+            font-size: 1.25rem;
+            color: rgba(255,255,255,0.9);
+            font-family: 'Lato', sans-serif;
+            font-weight: 400;
+        }
+
+        /* === New Tour Grid === */
+        .signature-tours {
+            background: var(--background-color);
+        }
+        .tour-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        .tour-grid-item {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+        .tour-grid-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+        }
+        .tour-grid-image img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+        .tour-grid-content {
+            padding: 1.5rem 2rem;
+        }
+        .tour-grid-content h3 {
+            font-size: 1.75rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        .tour-grid-content p {
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            min-height: 100px; /* Ensures cards have similar height */
+        }
+        .tour-grid-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+        .tour-grid-price {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+        .tour-grid-cta {
+            padding: 0.6rem 1.25rem;
+            font-size: 0.9rem;
+            background: var(--accent-color);
+            color: #fff;
+            border-radius: 50px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: background 0.3s ease;
+        }
+        .tour-grid-cta:hover {
+            background: var(--primary-color);
+            color: #fff;
+        }
+        
+        /* === Featured Tour Section === */
+        .featured-tour {
+            background: #fff;
+        }
+        .page-content-grid {
+            display: grid;
+            grid-template-columns: 2.5fr 1fr;
+            gap: 3rem;
+        }
+        .page-main-content h3 {
+            font-size: 2rem;
+            margin-top: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-color);
+            border-bottom: 2px solid #eee;
+            padding-bottom: 0.5rem;
+        }
+        .page-main-content h3:first-child {
+            margin-top: 0;
+        }
+
+        /* Pricing Table */
+        .pricing-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+        }
+        .pricing-table th, .pricing-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        .pricing-table th {
+            background-color: #f9f9f9;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        .pricing-table tr:hover {
+            background-color: #fcfcfc;
+        }
+        .pricing-table td:last-child {
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+
+        /* Inclusions List (reusing tab styles) */
+        .tab-content ul {
+            padding-left: 20px;
+            list-style: disc;
+        }
+        .tab-content li {
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        /* Accordion Styles */
+        .day-accordion {
+            border-bottom: 1px solid #eee;
+        }
+        .day-accordion-toggle {
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            padding: 1.25rem 1rem;
+            font-size: 1.1rem;
+            font-family: var(--font-body);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700; /* Bolder text */
+            color: #333;
+            transition: background 0.3s ease;
+        }
+        .day-accordion-toggle:hover {
+            background: #f9f9f9;
+        }
+        .day-accordion-toggle strong {
+            color: var(--accent-color);
+            margin-right: 0.5rem;
+            font-size: 1.15rem;
+        }
+        .toggle-icon {
+            font-size: 1.75rem;
+            font-weight: 300;
+            color: var(--accent-color);
+            transition: transform 0.3s ease;
+        }
+        .day-accordion-toggle.active .toggle-icon {
+           transform: rotate(45deg);
+        }
+        .day-accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+            background: #fafafa;
+        }
+        .day-accordion-content-inner {
+            padding: 0 1.5rem 1.5rem 1.5rem;
+        }
+        .day-accordion-content-inner p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 0;
+            padding-top: 1rem;
+            border-top: 1px dashed #ddd;
+        }
+        
+        /* Sidebar Styles */
+        .page-sidebar {
+             position: sticky;
+             top: 120px; /* (Header height + 40px) */
+             height: fit-content;
+        }
+        .sidebar-why-us {
+            background: #fff;
+            padding: 1.5rem;
+            border: 1px solid #eee;
+            border-left: 4px solid var(--accent-color); 
+            margin-bottom: 1.5rem;
+            border-radius: 0 8px 8px 0;
+        }
+        .sidebar-why-us h4 {
+            margin-top: 0;
+            font-size: 1.25rem;
+            color: #333;
+        }
+        .sidebar-why-us p {
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+        .enquire-now-cta {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            background: var(--accent-color);
+            color: #fff;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: 5px;
+            margin-top: 1.5rem;
+            transition: background 0.3s ease;
+        }
+        .enquire-now-cta:hover {
+            background: #a93226; /* Darker red */
+            color: #fff;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .tour-grid {
+                grid-template-columns: 1fr; /* Stack on tablets */
+            }
+            .page-content-grid {
+                grid-template-columns: 1fr; /* Stack on tablets */
+            }
+            .page-sidebar {
+                position: relative;
+                top: 0;
+            }
+        }
+        @media (max-width: 768px) {
+             .hero-static .hero-title { font-size: 2.5rem; }
+             .tour-grid-footer {
+    /* Stack the price and button vertically */
+    flex-direction: column;
+    align-items: stretch; /* Make children full-width */
+    gap: 1rem; /* Add space between price and button */
+}
+
+.tour-grid-price {
+    /* Center the price now that it's on its own line */
+    text-align: center;
+    font-size: 1.4rem; /* Make the price a bit more prominent */
+}
+
+.tour-grid-cta {
+    width: 100%; /* Make the button full-width */
+    text-align: center;
+    padding: 0.8rem 1.25rem; /* Make it a bit taller for easier tapping */
+    font-size: 1rem; /* Slightly larger text */
+    border-radius: 8px; /* A more modern, block-level button radius */
+}
+        }
+
+    </style>
+</head>
+<body>
+
+
+<header class="main-header main-header-static scrolled">
+
+    <nav class="navbar">
+        <div class="nav-logo">
+            <a href="index.html">HiMoto Tours</a>
+        </div>
+
+        <button class="nav-toggle" id="mobileMenuBtn">
+            <span></span><span></span><span></span>
+        </button>
+
+        <ul class="nav-menu" id="mobileMenu">
+            <li><a href="index.html" >Home</a></li>
+            <li><a href="all-tours.html" class="active" >All Tours</a></li>
+            <li><a href="adventure-styles.html">Tour Styles</a></li>
+            <li><a href="vehicle-styles.html">Vehicle Types</a></li>
+        </ul>
+
+        <a href="https://wa.me/919459028853?text=Hi%20I%20want%20to%20inquire%20about%20a%20Himalayan%20tour" class="cta-button nav-cta" target="_blank">
+            Plan Your Trip
+        </a>
+    </nav>
+</header>
+    <main>
+
+        <section class="hero-static" style="background-image: linear-gradient(rgba(14, 29, 42, 0.6), rgba(14, 29, 42, 0.6)), url('assets/bg13.png');">
+            <div class="hero-content">
+                <h1 class="hero-title">All Guided Tours</h1>
+                <p class="hero-subtitle">Find your perfect Himalayan expedition, from iconic circuits to grand traverses.</p>
+            </div>
+        </section>
+
+        <section class="signature-tours content-section">
+            <div class="container">
+                <h2 class="section-title">Our Signature Expeditions</h2>
+                <div class="tour-grid">
+
+                    <div class="tour-grid-item">
+                        <div class="tour-grid-image">
+                            <img src="assets/bridge.jpg" alt="Spiti Valley">
+                        </div>
+                        <div class="tour-grid-content">
+                            <h3>Winter Spiti</h3>
+                            <p>The classic 'Middle Land' adventure. Ride through Kinnaur's cliffhangers, visit ancient monasteries, and camp by the moon-like Chandratal Lake.</p>
+                            <div class="tour-grid-footer">
+                                <span class="tour-grid-price">From ₹35,000</span>
+                                <a href="spiti.html" class="tour-grid-cta">Learn More</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tour-grid-item">
+                        <div class="tour-grid-image">
+                            <img src="assets/sta.jpg" alt="Classic Ladakh">
+                        </div>
+                        <div class="tour-grid-content">
+                            <h3>Classic Ladakh</h3>
+                            <p>The bucket-list ride. Conquer Khardung La, explore the sand dunes of Nubra Valley, and witness the stunning, color-changing Pangong Lake.</p>
+                            <div class="tour-grid-footer">
+                                <span class="tour-grid-price">From ₹42,000</span>
+                                <a href="ladakh.html" class="tour-grid-cta">Learn More</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tour-grid-item">
+                        <div class="tour-grid-image">
+                            <img src="assets/bg2.jpg" alt="Zanskar Valley">
+                        </div>
+                        <div class="tour-grid-content">
+                            <h3>Zanskar Valley Traverse</h3>
+                            <p>An epic traverse into the 'Hidden Kingdom.' Witness the mighty Drang-Drung glacier, cross Pensi La, and ride from Srinagar to Leh.</p>
+                            <div class="tour-grid-footer">
+                                <span class="tour-grid-price">From ₹48,000</span>
+                                <a href="zansk.html" class="tour-grid-cta">Learn More</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tour-grid-item">
+                        <div class="tour-grid-image">
+                            <img src="assets/bike.png" alt="Pangi Valley">
+                        </div>
+                        <div class="tour-grid-content">
+                            <h3>Pangi Valley Challenge</h3>
+                            <p>The ultimate test for expert riders. Conquer the treacherous Sach Pass and survive the world's most dangerous road: the Killar-Kishtwar cliffhanger.</p>
+                            <div class="tour-grid-footer">
+                                <span class="tour-grid-price">From ₹38,000</span>
+                                <a href="pangi-tour.html" class="tour-grid-cta">Learn More</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section class="featured-tour content-section">
+            <div class="container">
+                <h2 class="section-title">Featured Grand Expedition</h2>
+                <p class="section-intro" style="font-weight: 700; color: #333;">Manali-Zanskar-Kargil-Ladakh-Umlingla-Manali (Delhi to Delhi)</p>
+                
+                <div class="page-content-grid">
+                    
+                    <div class="page-main-content">
+
+                        <h3>Tour Pricing</h3>
+                        <table class="pricing-table">
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>For Single person (350cc bike)</td>
+                                    <td>Rs 48,000 pp</td>
+                                </tr>
+                                <tr>
+                                    <td>Two people with 1 bike (350cc bike)</td>
+                                    <td>Rs 38,000 pp</td>
+                                </tr>
+                                <tr>
+                                    <td>For Single person (500cc bike)</td>
+                                    <td>Rs 51,000 pp</td>
+                                </tr>
+                                <tr>
+                                    <td>Two people with 1 bike (500cc bike)</td>
+                                    <td>Rs 40,000 pp</td>
+                                </tr>
+                                <tr>
+                                    <td>For Single person (Himalayan bike)</td>
+                                    <td>Rs 56,000 pp</td>
+                                </tr>
+                                <tr>
+                                    <td>Two people with 1 bike (Himalayan bike)</td>
+                                    <td>Rs 43,000 pp</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h3>Detailed Itinerary</h3>
+                        <div class="itinerary-wrapper">
+                            
+                            <div class="day-accordion">
+                                <button class="day-accordion-toggle">
+                                    <span><strong>Day 01:</strong> Delhi-Manali</span>
+                                    <span class="toggle-icon">+</span>
+                                </button>
+                                <div class="day-accordion-content">
+                                    <div class="day-accordion-content-inner">
+                                        <p>Overnight at Volvo bus.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="day-accordion">
+                                <button class="day-accordion-toggle">
+                                    <span><strong>Day 02:</strong> Manali - Atul Tunnel - Keylong or Jispa</span>
+                                    <span class="toggle-icon">+</span>
+                                </button>
+                                <div class="day-accordion-content">
+                                    <div class="day-accordion-content-inner">
+                                        <p>Arrive in Manali, meet the team, get your bike, and start the ride towards Jispa via the Atal Tunnel.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="day-accordion">
+                                <button class="day-accordion-toggle">
+                                    <span><strong>Day 03:</strong> Jispa - Shinkula - Purne - Padum (160 kms / 8 hrs)</span>
+                                    <span class="toggle-icon">+</span>
+                                </button>
+                                <div class="day-accordion-content">
+                                    <div class="day-accordion-content-inner">
+                                        <p>Cross the high Shingo La pass and enter the remote Zanskar Valley, reaching Padum by evening.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="day-accordion">
+                                <button class="day-accordion-toggle">
+                                    <span><strong>Day 04:</strong> Padum - Rangdum - Kargil (230 kms / 10 hrs)</span>
+                                    <span class="toggle-icon">+</span>
+                                </button>
+                                <div class="day-accordion-content">
+                                    <div class="day-accordion-content-inner">
+                                        <p>A long day of riding across the Zanskar landscape, crossing Pensi La and passing the Drang-Drung Glacier.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="day-accordion">
+                                <button class="day-accordion-toggle">
+                                    <span><strong>Day 05:</strong> Kargil - Lamayuru - Leh</span>
+                                    <span class="toggle-icon">+</span>
+                                </button>
+                                <div class="day-accordion-content">
+                                    <div class="day-accordion-content-inner">
+                                        <p>Ride on the Leh-Srinagar highway, visit the Lamayuru "Moonland" monastery, and reach Leh.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="day-accordion">
+                                <button class="day-accordion-toggle">
+                                    <span><strong>Day 06:</strong> Leh - Khardong La - Nubra (130 kms / 8 hrs)</span>
+                                    <span class="toggle-icon">+</span>
+                                </button>
+                                <div class="day-accordion-content">
+                                    <div class="day-accordion-content-inner">
+                                        <p>Ride to the top of Khardung La and descend into the high-altitude desert of Nubra Valley.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="day-accordion">
+                                <button class="day-accordion-toggle">
+                                    <span><strong>Day 07:</strong> Nubra - Pangong via Shyok valley (160 kms / 8 hrs)</span>
+                                    <span class="toggle-icon">+</span>
+                                </button>
+                                <div class="day-accordion-content">
+                                    <div class="day-accordion-content-inner">
+                                        <p>Take the remote Shyok river road to connect directly to the stunning Pangong Tso Lake.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="day-accordion">
+                                <button class="day-accordion-toggle">
+                                    <span><strong>Day 08:</strong> Pangong - Chushul - Rizangla - Koyul - Umlingla (230 kms / 8 hrs)</span>
+                                    <span class="toggle-icon">+</span>
+                                </button>
+                                <div class="day-accordion-content">
+                                    <div class="day-accordion-content-inner">
+                                        <p>An extreme ride through remote eastern Ladakh. Visit Rizangla war memorial and conquer the mighty Umling La, one of the world's highest motorable roads.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="day-accordion">
+                                <button class="day-accordion-toggle">
+                                    <span><strong>Day 09:</strong> Koyul - Leh</span>
+                                    <span class="toggle-icon">+</span>
+                                </button>
+                                <div class="day-accordion-content">
+                                    <div class="day-accordion-content-inner">
+                                        <p>Ride back to Leh from the remote Koyul region, acclimatizing to the journey.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="day-accordion">
+                                <button class="day-accordion-toggle">
+                                    <span><strong>Day 10:</strong> Leh - Sarchu - Jispa (10 hrs)</span>
+                                    <span class="toggle-icon">+</span>
+                                </button>
+                                <div class="day-accordion-content">
+                                    <div class="day-accordion-content-inner">
+                                        <p>Begin the journey back on the Manali-Leh highway, crossing high passes and reaching Jispa for the night.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="day-accordion">
+                                <button class="day-accordion-toggle">
+                                    <span><strong>Day 11:</strong> Jispa - Manali & Depart</span>
+                                    <span class="toggle-icon">+</span>
+                                </button>
+                                <div class="day-accordion-content">
+                                    <div class="day-accordion-content-inner">
+                                        <p>Ride from Jispa to Manali via the Atal Tunnel. In the evening, board the overnight Volvo bus to Delhi.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="day-accordion">
+                                <button class="day-accordion-toggle">
+                                    <span><strong>Day 12:</strong> Arrive in Delhi</span>
+                                    <span class="toggle-icon">+</span>
+                                </button>
+                                <div class="day-accordion-content">
+                                    <div class="day-accordion-content-inner">
+                                        <p>Arrive in Delhi in the morning. The tour concludes.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        
+                        <h3>Inclusions</h3>
+                        <div class="tab-content active">
+                            <ul>
+                                <li>Accommodation in hotels/camps/guest houses on a double/triple sharing basis as per package option. Check-in/ out time is 12 noon.</li>
+                                <li>MAP basis in hotel (Room + Breakfast + Dinner). starting with dinner on day 02 till Breakfast on day 11.</li>
+                                <li>One Enfield bike (with fuel) per rider as per the above itinerary from day 02 to day 11.</li>
+                                <li>Fuel for bike.</li>
+                                <li>Basic spares parts for the bike (any damage/ change of spares payable as extra directly).</li>
+                                <li>Road captain from day 02 to day 11 in the bike (For more than 10 bikes).</li>
+                                <li>One Motorbike Mechanic for the entire tour.</li>
+                                <li>Riding Gears: Helmet, Elbow and Knee guards.</li>
+                                <li>Volvo tickets from Delhi to Manali and vice versa.</li>
+                                <li>Inner line Permit.</li>
+                                <li>01 backup jeep for more than 10 riders.</li>
+                                <li>First aid box and Oxygen cylinder.</li>
+                                <li>Lifetime memories.</li>
+                            </ul>
+                        </div>
+                        
+                    </div>
+                    
+                    <aside class="page-sidebar">
+                        <img src ="assets/map.png"> <br><br>
+                        <div class="sidebar-why-us">
+                            <h4>Book This Expedition</h4>
+                            <p>This is one of our most epic all-inclusive expeditions, covering Zanskar, Ladakh, and the mighty Umling La pass. Contact us to check for fixed departure dates or to book this as a private group tour.</p>
+                            <a href="https://wa.me/919459028853?text=Hi%20I%20want%20to%20inquire%20about%20the%20Grand%20Umlingla%20Expedition" class="enquire-now-cta" target="_blank">Enquire Now</a>
+                        </div>
+                        
+                    </aside>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="main-footer">
+        <div class="container footer-container">
+            <div class="footer-branding">
+                <h3>HiMoto Tours</h3>
+                <p>Discover the Soul of the Himalayas.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="all-tours.html">All Tours</a></li>
+                    <li><a href="adventure-styles.html">Tour Styles</a></li>
+                    <li><a href="vehicle-styles.html">Vehicle Types</a></li>
+                </ul>
+            </div>
+            <div class="footer-social">
+                <h4>Follow Us</h4>
+                <a href="#">Instagram</a>
+                <a href="#">Facebook</a>
+                <a href="#">YouTube</a>
+            </div>
+            <div class="footer-contact">
+                <h4>Get in Touch</h4>
+                <a href="mailto: "> </a>
+                <p>Manali, Himachal Pradesh, India</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 HiMoto Tours. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/919459028853?text=Hi%20I%20want%20to%20inquire%20about" 
+    class="booknow-float" target="_blank">
+        Book Now
+    </a>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const accordionToggles = document.querySelectorAll('.day-accordion-toggle');
+
+            accordionToggles.forEach(toggle => {
+                toggle.addEventListener('click', () => {
+                    const content = toggle.nextElementSibling;
+                    const isCurrentlyActive = toggle.classList.contains('active');
+
+                    // Optional: Close all others
+                    // accordionToggles.forEach(otherToggle => {
+                    //     if (otherToggle !== toggle) {
+                    //         otherToggle.classList.remove('active');
+                    //         otherToggle.nextElementSibling.style.maxHeight = null;
+                    //     }
+                    // });
+
+                    // Toggle the clicked one
+                    if (isCurrentlyActive) {
+                        toggle.classList.remove('active');
+                        content.style.maxHeight = null;
+                    } else {
+                        toggle.classList.add('active');
+                        content.style.maxHeight = content.scrollHeight + 'px';
+                    }
+                });
+            });
+        });
+        const btn = document.getElementById('mobileMenuBtn')
+const menu = document.getElementById('mobileMenu')
+
+btn.addEventListener('click', ()=>{
+    menu.classList.toggle('show')
+})
+    </script>
+
+</body>
+</html>

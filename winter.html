@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spiti Valley: The Middle Land – HiMoto Tours</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="pages.css">
+    
+    <style>
+        /* === NEW HERO SLIDESHOW STYLES === */
+        .hero-slideshow {
+            position: relative;
+            width: 100%;
+            height: 70vh; /* You can adjust this height */
+            overflow: hidden;
+            background: #222;
+        }
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .slide.active {
+            opacity: 1;
+        }
+        /* Dark overlay for text readability */
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1;
+        }
+        /* Ensure hero content is on top of the overlay */
+       .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            color: #fff; /* This will make all text white by default */
+        }
+
+        .hero-title {
+             /* Your existing hero-title styles */
+             color: #fff; /* Explicitly set to white */
+        }
+        
+        .hero-subtitle {
+            color: #fff; /* Or color: white; */
+            font-size: 1.25rem; /* Example: adjust as needed */
+            font-weight: 400;   /* Example: adjust as needed */
+        }
+        /* Slideshow Navigation */
+        .slide-nav {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            padding: 1rem 1.5rem;
+            font-size: 2rem;
+            font-weight: bold;
+            border: none;
+            user-select: none;
+            transition: background 0.3s ease;
+        }
+        .slide-nav:hover {
+            background: rgba(0, 0, 0, 0.6);
+        }
+        .slide-nav.prev {
+            left: 0;
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+        .slide-nav.next {
+            right: 0;
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+        }
+        /* === END HERO SLIDESHOW STYLES === */
+
+
+        /* Styles for the Tour Stats Grid */
+        .tour-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); 
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto 2.5rem auto;
+            padding: 2rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        @media (max-width: 900px) {
+            .tour-stats-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        @media (max-width: 500px) {
+            .tour-stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+   .stat-item {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+        
+        /* This is the main fix: styles now target <img> */
+        .stat-icon img {
+            width: 36px;   /* Or your preferred size */
+            height: 36px;  /* Or your preferred size */
+            object-fit: contain;
+            margin-bottom: 0.75rem; /* Space between icon and label */
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #777; /* Lighter color, like screenshot */
+            display: block;
+            margin-bottom: 0.25rem; /* Tighter gap */
+        }
+        
+        .stat-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #333; /* Darker color for value */
+        }
+
+        /* Styles for Tabbed Interface */
+        .tabs-container {
+            display: flex;
+            flex-wrap: wrap; 
+            border-bottom: 2px solid #eee;
+            margin-bottom: 1.5rem;
+        }
+        .tab-button {
+            padding: 0.75rem 1.25rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #777;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px; 
+        }
+        .tab-button.active {
+            color: #c0392b;
+            border-bottom-color: #c0392b;
+            font-weight: 700;
+        }
+        .tab-content {
+            display: none; 
+        }
+        .tab-content.active {
+            display: block; 
+        }
+        .tab-content h3 {
+            margin-top: 0;
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+        .tab-content ul {
+            padding-left: 20px;
+        }
+        .tab-content li {
+            margin-bottom: 0.75rem;
+        }
+
+        
+        /* Accordion Styles for Itinerary */
+        .day-accordion {
+            border-bottom: 1px solid #eee;
+        }
+        .day-accordion:last-child {
+            border-bottom: none;
+        }
+        .day-accordion-toggle {
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            padding: 1.25rem 1rem;
+            font-size: 1.1rem;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 500;
+            color: #333;
+            transition: background 0.3s ease;
+        }
+        .day-accordion-toggle:hover {
+            background: #f9f9f9;
+        }
+        .day-accordion-toggle strong {
+            color: #c0392b;
+            margin-right: 0.5rem;
+            font-size: 1.15rem;
+        }
+        .toggle-icon {
+            font-size: 1.75rem;
+            font-weight: 300;
+            color: #c0392b;
+            transition: transform 0.3s ease;
+        }
+        .day-accordion-toggle.active .toggle-icon {
+             transform: rotate(45deg);
+        }
+        
+        .day-accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+            background: #fafafa;
+        }
+        .day-accordion-content-inner {
+            padding: 0 1.5rem 1.5rem 1.5rem;
+        }
+        .day-accordion-content-inner p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            padding-top: 1rem;
+            border-top: 1px dashed #ddd;
+        }
+        .day-accordion-content-inner .day-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            font-size: 0.95rem;
+        }
+         .day-accordion-content-inner .day-meta span {
+            color: #333;
+        }
+        .day-accordion-content-inner .day-meta strong {
+            color: #000;
+        }
+
+
+        /* Styles for "Why Us" Sidebar Card */
+        .sidebar-why-us {
+            background: #fff;
+            padding: 1.5rem;
+            border: 1px solid #eee;
+            border-left: 4px solid #c0392b; 
+            margin-bottom: 1.5rem;
+        }
+        .sidebar-why-us h4 {
+            margin-top: 0;
+            font-size: 1.25rem;
+            color: #333;
+        }
+        .sidebar-why-us ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .sidebar-why-us li {
+            position: relative;
+            padding-left: 28px;
+            margin-bottom: 0.75rem;
+            color: #555;
+        }
+        .sidebar-why-us li::before {
+            content: '✓'; 
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: #c0392b;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        .enquire-now-cta {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            background: #c0392b;
+            color: #fff;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: 5px;
+            margin-top: 1.5rem;
+        }
+        .enquire-now-cta:hover {
+            background: #a93226;
+        }/* NEW RESPONSIVE GALLERY CSS */
+.gallery-grid {
+  display: grid;
+  /* I've used your 0.5rem gap from the inline style */
+  gap: 0.5rem; 
+  max-width: 1200px;
+  margin: 2rem auto;
+  /* I've added the padding-bottom from your inline style */
+  padding-bottom: 5rem; 
+  
+  /* This is the best responsive setting: 
+     It creates as many 200px+ columns as can fit */
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  /* Matched border-radius to your gap for a clean look */
+  border-radius: 0.5rem; 
+}
+
+/* MOBILE: Force 2 columns */
+@media(max-width:600px){
+  .gallery-grid {
+    /* This ensures a clean 2-column layout on small phones */
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.gallery-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem; /* Or your preferred size */
+  font-weight: 700;
+  color: #333;       /* A dark, readable color */
+  text-align: center;
+  margin-top: 3rem;   /* Adds space above the title */
+  margin-bottom: 2rem; /* Adds space between the title and the images */
+}
+
+/* Makes the title a bit smaller on mobile */
+@media (max-width: 768px) {
+  .gallery-title {
+    font-size: 2rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+        /* MOBILE TAB STYLES */
+        @media (max-width: 768px) {
+            .tabs-container {
+                flex-direction: column;
+                gap: 0.5rem;
+                border-bottom: none;
+                margin-bottom: 2rem;
+            }
+            .tab-button {
+                background: #fff;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                text-align: center;
+                color: #c0392b;
+                font-weight: 700;
+                padding: 0.85rem 1rem;
+                border-bottom: 1px solid #ddd; 
+                margin-bottom: 0;
+            }
+            .tab-button.active {
+                background: #c0392b;
+                color: #fff;
+                border-color: #c0392b;
+                border-bottom-color: #c0392b;
+            }
+            
+            .page-content-grid {
+                grid-template-columns: 1fr; 
+            }
+            .page-sidebar {
+                margin-top: 2.5rem;
+            }
+        }
+    </style>
+
+    <script src="animations.js" defer></script>
+</head>
+<body>
+
+    <header class="main-header main-header-static">
+        <nav class="navbar">
+            <div class="nav-logo">
+                <a href="index.html">HiMoto Tours</a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="adventure-bikes.html">About US</a></li>
+            </ul>
+            <a href="#contact" class="cta-button nav-cta">Plan Your Trip</a>
+        </nav>
+    </header>
+
+    <main>
+
+        <section class="hero-slideshow">
+            <div class="slides-container">
+                
+                <div class="slide active" style="background-image: url('assets/bg10.jpeg');">
+                    <div class="hero-content">
+                        <h1 class="hero-title">Conquer the Frozen Frontier</h1>
+                        <p class="hero-subtitle">Ride through snow-clad passes and witness the magic of a Himalayan winter.</p>
+                    </div>
+                </div>
+                
+                <div class="slide" style="background-image: url('assets/bg12.png');">
+                    <div class="hero-content">
+                        <h1 class="hero-title">Witness the Winter Magic</h1>
+                        <p class="hero-subtitle">Frozen lakes and silent, snow-covered valleys await your arrival.</p>
+                    </div>
+                </div>
+                
+                <div class="slide" style="background-image: url('assets/bg11.jpg');">
+                    <div class="hero-content">
+                        <h1 class="hero-title">An Adventure Like No Other</h1>
+                        <p class="hero-subtitle">Experience the ultimate challenge and serenity of winter in the Himalayas.</p>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <button class="slide-nav prev" id="slide-prev">&#10094;</button>
+            <button class="slide-nav next" id="slide-next">&#10095;</button>
+        </section>
+        <section class="tour-stats-wrapper">
+            <div class="container">
+                <div class="tour-stats-grid">
+                    
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <img src="assets/icons/icon-days.png" alt="Days">
+                        </div>
+                        <span class="stat-label">Days</span>
+                        <span class="stat-value">9D / 8N</span>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                             <img src="assets/icons/icon-journey.png" alt="Journey">
+                        </div>
+                        <span class="stat-label">Journey</span>
+                        <span class="stat-value">~1300 KM</span>
+                    </div>
+
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <img src="assets/icons/icon-motorcycle.png" alt="Motorcycle">
+                        </div>
+                        <span class="stat-label">Motorcycle</span>
+                        <span class="stat-value">Royal Enfield Himalayan 411cc</span>
+                    </div>
+
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <img src="assets/icons/icon-altitude.png" alt="Max Riding Altitude">
+                        </div>
+                        <span class="stat-label">Max Riding Alt</span>
+                        <span class="stat-value">4587m</span>
+                    </div>
+
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                           <img src="assets/icons/icon-sleeping.png" alt="Max Sleeping Altitude">
+                        </div>
+                        <span class="stat-label">Max Sleeping Alt</span>
+                        <span class="stat-value">4250m</span>
+                    </div>
+
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <img src="assets/icons/icon-skills.png" alt="Riding Skills">
+                        </div>
+                        <span class="stat-label">Riding Skills</span>
+                        <span class="stat-value">Moderate</span>
+                    </div>
+
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <img src="assets/icons/icon-season.png" alt="Best Season">
+                        </div>
+                        <span class="stat-label">Best Season</span>
+                        <span class="stat-value">June to September</span>
+                    </div>
+
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <img src="assets/icons/icon-group.png" alt="Group Size">
+                        </div>
+                        <span class="stat-label">Group Size</span>
+                        <span class="stat-value">20</span>
+                    </div>
+
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <img src="assets/icons/icon-fly-in.png" alt="Fly In">
+                        </div>
+                        <span class="stat-label">Fly In</span>
+                        <span class="stat-value">Chandigarh (IXC)</span>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <img src="assets/icons/icon-fly-out.png" alt="Fly Out">
+                        </div>
+                        <span class="stat-label">Fly Out</span>
+                        <span class="stat-value">Chandigarh (IXC)</span>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+        <section class="page-content content-section">
+            <div class="container">
+                <div class="page-content-grid">
+                    
+                    <div class="page-main-content">
+                        <div class="tabs-container">
+                            <button class="tab-button active" data-tab="about">About</button>
+                            <button class="tab-button" data-tab="plan">Tour Plan</button>
+                            <button class="tab-button" data-tab="pricing">Pricing & Dates</button>
+                            <button class="tab-button" data-tab="includes">Inclusions</button>
+                            <button class="tab-button" data-tab="faq">FAQs</button>
+                        </div>
+
+                        <div id="about" class="tab-content active">
+                            <h3>Tour Highlights</h3>
+                            <p>This is not just a motorcycle trip; it's a high-altitude expedition through the remote and stunning Spiti Valley. Known as "The Middle Land," Spiti is a rugged, cold desert mountain valley that will test your limits and reward you with vistas that defy description.</p>
+                            <ul>
+                                <li>Conquer the treacherous roads of Kinnaur Valley, including the famous cliffhanger section.</li>
+                                <li>Ride to the last inhabited village near the Indo-Chinese border, Chitkul.</li>
+                                <li>Send a postcard from the world's highest post office in Hikkim (14,400 ft).</li>
+                                <li>Visit Komic, the highest village in the world connected by a motorable road (15,027 ft).</li>
+                                <li>Explore the ancient Key Monastery, perched precariously on a hilltop.</li>
+                                <li>Camp beside the mystical and serene Chandratal (Moon Lake).</li>
+                                <li>Cross the high-altitude Kunzum Pass (4551m) and the iconic Atal Tunnel.</li>
+                            </ul>
+                            <p>Our expert guides and mechanics ensure your safety and comfort as you navigate some of the world's most challenging and beautiful roads. This is a journey for the true explorer.</p>
+                        </div>
+
+                        <div id="plan" class="tab-content">
+                            <h3>Detailed Itinerary</h3>
+                            
+                            <div class="day-accordion">
+                                <button class="day-accordion-toggle">
+                                    <span><strong>Day 01:</strong> Arrive in Chandigarh</span>
+                                    <span class="toggle-icon">+</span>
+                                </button>
+                                <div class="day-accordion-content">
+                                    <div class="day-accordion-content-inner">
+                                        <p>Welcome aboard, Rider! Your Himalayan adventure begins in Chandigarh. Arrive at the airport (IXC) or railway station, and our team will transfer you to the hotel. Check-in starts at 12 PM. Once settled, you're free to explore the city. Join us back at the hotel in the evening for a detailed orientation session and to meet your fellow riders. We'll cover the roadmap, riding etiquette, potential pitfalls, and allocate your motorbikes. Test them out and report any issues. Enjoy a delicious dinner with the group as you gear up for the journey ahead.</p>
+                                        <div class="day-meta">
+                                            <span><strong>Accommodation:</strong> Deluxe Hotel</span>
+                                            <span><strong>Meals:</strong> Dinner</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="day-accordion">
+                                <button class="day-accordion-toggle">
+                                    <span><strong>Day 02:</strong> Chandigarh - Jibhi ( 270 KM / 8-9 Hrs)</span>
+                                    <span class="toggle-icon">+</span>
+                                </button>
+                                <div class="day-accordion-content">
+                                    <div class="day-accordion-content-inner">
+                                        <p>After a hearty breakfast, we kickstart our epic ride! We leave the city plains behind, ascending into the Shivalik Hills. The ride is long but scenic as we cruise on smooth highways towards Shimla. We'll bypass the main city and continue our journey, descending towards the Sutlej river before climbing again into the lesser-known Seraj Valley. The last stretch of the ride takes us through dense pine forests and winding mountain roads, leading to the hidden gem of Jibhi. Upon arrival, relax, explore the nearby waterfall, and let the tranquility of the mountain paradise sink in.</p>
+                                        <div class="day-meta">
+                                            <span><strong>Accommodation:</strong> Deluxe Hotel</span>
+                                            <span><strong>Meals:</strong> Breakfast and Dinner</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="day-accordion">
+                                <button class="day-accordion-toggle">
+                                    <span><strong>Day 03:</strong> Jibhi - Jalori Pass - Sangla (200 KM / 7-8 Hrs)</span>
+                                    <span class="toggle-icon">+</span>
+                                </button>
+                                <div class="day-accordion-content">
+                                    <div class="day-accordion-content-inner">
+                                        <p>Kickstart the day early... <em>(Content from your prompt)</em> ...End the day in the serene Sangla Valley, known for its apple orchards and the warm hospitality of the locals. It's a perfect place to rest, reflect on the thrilling ride, and gear up for the next adventure.Overnight at Sangla Valley, nestled among apple orchards.</p>
+                                        <div class="day-meta">
+                                            <span><strong>Accommodation:</strong> Deluxe Camp</span>
+                                            <span><strong>Meals:</strong> Breakfast and Dinner</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="day-accordion">
+                                <button class="day-accordion-toggle">
+                                    <span><strong>Day 04:</strong> Sangla - Chitkul - Kalpa ( 90 KM / 4-5 Hrs)</span>
+                                    <span class="toggle-icon">+</span>
+                                </button>
+                                <div class="day-accordion-content">
+                                    <div class="day-accordion-content-inner">
+                                        <p>Start your morning with a peaceful stroll... <em>(Content from your prompt)</em> ...you'll quickly run out of space with the number of photos you'll want to take!</p>
+                                        <div class="day-meta">
+                                            <span><strong>Accommodation:</strong> Deluxe Hotel</span>
+                                            <span><strong>Meals:</strong> Breakfast and Dinner</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="day-accordion">
+                                <button class="day-accordion-toggle">
+                                    <span><strong>Day 05:</strong> Kalpa - Tabo - Kaza (220 KM / 6-7 Hrs)</span>
+                                    <span class="toggle-icon">+</span>
+                                </button>
+                                <div class="day-accordion-content">
+                                    <div class="day-accordion-content-inner">
+                                        <p>Wake up to the breathtaking sight of Kinner Kailash... <em>(Content from your prompt)</em> ...It's a perfect end to a day of adventure in the high Himalayas.</p>
+                                        <div class="day-meta">
+                                            <span><strong>Accommodation:</strong> Deluxe Hotel / Deluxe Mud House</span>
+                                            <span><strong>Meals:</strong> Breakfast and Dinner</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="day-accordion">
+                                <button class="day-accordion-toggle">
+                                    <span><strong>Day 06:</strong> Kaza - Komic - Hikkim - Kaza (90 KM / 4-5 Hrs)</span>
+                                    <span class="toggle-icon">+</span>
+                                </button>
+                                <div class="day-accordion-content">
+                                    <div class="day-accordion-content-inner">
+                                        <p>Buckle up early, because today is going to be an epic adventure!... <em>(Content from your prompt)</em> ...Ride back to Kaza for a well-deserved rest under the stars. Overnight at Kaza.</p>
+                                        <div class="day-meta">
+                                            <span><strong>Accommodation:</strong> Deluxe Hotel</span>
+                                            <span><strong>Meals:</strong> Breakfast and Dinner</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="day-accordion">
+                                <button class="day-accordion-toggle">
+                                    <span><strong>Day 07:</strong> Kaza - Kunzum Pass - Chandra Taal (150 KM / 5-6 Hrs)</span>
+                                    <span class="toggle-icon">+</span>
+                                </button>
+                                <div class="day-accordion-content">
+                                    <div class="day-accordion-content-inner">
+                                        <p>Today's ride is nothing short of legendary... <em>(Content from your prompt)</em> ...but the memories of today will keep your spirit warm. Overnight stay at Chandratal camp.</p>
+                                        <div class="day-meta">
+                                            <span><strong>Accommodation:</strong> Basic Camp</span>
+                                            <span><strong>Meals:</strong> Breakfast and Dinner</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="day-accordion">
+                                <button class="day-accordion-toggle">
+                                    <span><strong>Day 08:</strong> Chandra Taal - Atal Tunnel - Manali ( 120 KM / 6-7 Hrs)</span>
+                                    <span class="toggle-icon">+</span>
+                                </button>
+                                <div class="day-accordion-content">
+                                    <div class="day-accordion-content-inner">
+                                        <p>Last night at Chandratal—you felt it: the cold that bites... <em>(Content from your prompt)</em> ...This may be our last night together, but the memories we've created will ride with us forever. Overnight at Manali.</p>
+                                        <div class="day-meta">
+                                            <span><strong>Accommodation:</strong> Deluxe Hotel</span>
+                                            <span><strong>Meals:</strong> Breakfast and Dinner</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="day-accordion">
+                                <button class="day-accordion-toggle">
+                                    <span><strong>Day 09:</strong> Manali - Chandigarh ( 300 KM / 8-9 Hrs)</span>
+                                    <span class="toggle-icon">+</span>
+                                </button>
+                                <div class="day-accordion-content">
+                                    <div class="day-accordion-content-inner">
+                                        <p>This is the final leg of our epic journey. After an early breakfast, we saddle up one last time to ride from the mountains back to the plains. The journey down from Manali is just as scenic, following the Beas River before hitting the highway. We'll navigate the twists and turns as we descend, stopping for lunch en route. We aim to reach Chandigarh by evening, where the tour officially concludes. You'll be transferred to the airport or your hotel. Congratulations on completing the Spiti circuit!</p>
+                                        <div class="day-meta">
+                                            <span><strong>Accommodation:</strong> NIL</span>
+                                            <span><strong>Meals:</strong> Breakfast</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        
+                        <div id="pricing" class="tab-content">
+                            <h3>Tour Cost & Dates</h3>
+                            <p><strong>Upcoming Dates:</strong></p>
+                            <ul>
+                                <li>June 10th - June 18th</li>
+                                <li>July 5th - July 13th</li>
+                                <li>Aug 20th - Aug 28th</li>
+                            </ul>
+                            <p><strong>Price:</strong> ₹35,000 per person (Manali to Manali)</p>
+                            <p><em>(Placeholder content... add your full pricing details here.)</em></p>
+                        </div>
+
+                        <div id="includes" class="tab-content">
+                            <h3>Inclusions / Exclusions</h3>
+                            <p><strong>What's Included:</strong></p>
+                            <ul>
+                                <li>Accommodation on twin-sharing basis.</li>
+                                <li>All meals (Breakfast, Dinner).</li>
+                                <li>Royal Enfield Himalayan 411cc Motorcycle.</li>
+                                <li>Fuel for the entire trip.</li>
+                                <li>Entry fees and permits.</li>
+                                <li>Backup Vehicle for luggage.</li>
+                                <li>Mechanic and Tour Leader.
+                            </ul>
+                            <p><strong>What's Not Included:</strong></p>
+                            <ul>
+                                <li>Flights to/from Manali.</li>
+                                <li>Lunches.</li>
+                                <li>Personal expenses.</li>
+                                <li>Riding Gear.</li>
+                            </ul>
+                        </div>
+                        
+                        <div id="faq" class="tab-content">
+                            <h3>Frequently Asked Questions</h3>
+                            <p><strong>Q: What kind of riding skill is needed?</strong></p>
+                            <p>A: You should be a confident rider with at least 2-3 years of experience. This route includes challenging off-road sections, water crossings, and narrow mountain roads.</p>
+                            <p><strong>Q: What about Acute Mountain Sickness (AMS)?</strong></p>
+                            <p>A: We have designed the itinerary for gradual acclimatization. However, AMS is a risk. We advise consulting your doctor for preventative medication like Diamox.</p>
+                        </div>
+                        
+                    </div>
+                    
+                    <aside class="page-sidebar">
+                        <div class="sidebar-why-us">
+                            <h4>Why Choose HiMoto For Spiti?</h4>
+                            <ul>
+                                <li>10+ Years of Experience</li>
+                                <li>In-House Support Team</li>
+                                <li>Expertly Planned Itineraries</li>
+                                <li>Safety & Security First</li>
+                                <li>Well-Maintained Fleet</li>
+                                <li>Expert Local Guides</li>
+                                <li>Committed to Transparency</li>
+                            </ul>
+                           <a href="https://wa.me/919459028853?text=Hi%20I%20want%20to%20inquire%20about%20the" class="enquire-now-cta" target="_blank">Enquire Now</a>
+                        </div>
+                    </aside>
+
+                </div>
+            </div>
+        </section>
+
+        <section class="photo-gallery">
+            <h2 class="gallery-title">Glimpse of Valley</h2>
+          <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="assets/Cliffhanger.jpg" alt="Cliffhanger roads in Kinnaur">
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/Chitkul.jpg" alt="Chitkul village by Baspa river">
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/Key.jpg" alt="Key Monastery on a hill">
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/Chandratal.jpg" alt="Chandratal Lake camping">
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/post.jpg" alt="World's highest post office">
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/rr.jpg" alt="Riders at Kunzum Pass">
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/bg12.png" alt="Motorcycle water crossing">
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/sta.jpg" alt="Buddha statue at Langza">
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="main-footer">
+        <div class="container footer-container">
+            <div class="footer-branding">
+                <h3>HiMoto Tours</h3>
+                <p>Discover the Soul of the Himalayas.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="adventure-bikes.html">About Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-social">
+                <h4>Follow Us</h4>
+                <a href="#">Instagram</a>
+                <a href="#">Facebook</a>
+                <a href="#">YouTube</a>
+            </div>
+            <div class="footer-contact">
+                <h4>Get in Touch</h4>
+                <a href="mailto: "> </a>
+                <p>Manali, Himachal Pradesh, India</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 HiMoto Tours. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // --- Script for Tabs ---
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetTab = button.getAttribute('data-tab');
+                    
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+
+                    button.classList.add('active');
+                    document.getElementById(targetTab).classList.add('active');
+                });
+            });
+
+            // --- Accordion Script ---
+            const accordionToggles = document.querySelectorAll('.day-accordion-toggle');
+
+            accordionToggles.forEach(toggle => {
+                toggle.addEventListener('click', () => {
+                    const content = toggle.nextElementSibling;
+                    const icon = toggle.querySelector('.toggle-icon');
+                    const isCurrentlyActive = toggle.classList.contains('active');
+
+                    // Close all other accordions
+                    accordionToggles.forEach(otherToggle => {
+                        if (otherToggle !== toggle) {
+                            otherToggle.classList.remove('active');
+                            otherToggle.nextElementSibling.style.maxHeight = null;
+                            otherToggle.querySelector('.toggle-icon').textContent = '+';
+                        }
+                    });
+
+                    // Toggle the clicked one
+                    if (isCurrentlyActive) {
+                        toggle.classList.remove('active');
+                        content.style.maxHeight = null;
+                        icon.textContent = '+';
+                    } else {
+                        toggle.classList.add('active');
+                        content.style.maxHeight = content.scrollHeight + 'px';
+                        icon.textContent = '–';
+                    }
+                });
+            });
+
+
+            // === NEW SLIDESHOW SCRIPT ===
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('slide-prev');
+            const nextBtn = document.getElementById('slide-next');
+            let currentSlide = 0;
+            let slideInterval;
+
+            function showSlide(n) {
+                // Wrap around
+                if (n >= slides.length) {
+                    currentSlide = 0;
+                } else if (n < 0) {
+                    currentSlide = slides.length - 1;
+                } else {
+                    currentSlide = n;
+                }
+
+                // Hide all slides
+                slides.forEach(slide => {
+                    slide.classList.remove('active');
+                });
+
+                // Show the new current slide
+                slides[currentSlide].classList.add('active');
+            }
+
+            function nextSlide() {
+                showSlide(currentSlide + 1);
+            }
+
+            function prevSlide() {
+                showSlide(currentSlide - 1);
+            }
+
+            function startSlideShow() {
+                // Set an interval to auto-advance the slides
+                slideInterval = setInterval(nextSlide, 7000); // 7 seconds
+            }
+
+            function resetSlideShow() {
+                // Clear the interval and restart it
+                clearInterval(slideInterval);
+                startSlideShow();
+            }
+
+            // Event Listeners
+            nextBtn.addEventListener('click', () => {
+                nextSlide();
+                resetSlideShow(); // Reset timer on manual click
+            });
+
+            prevBtn.addEventListener('click', () => {
+                prevSlide();
+                resetSlideShow(); // Reset timer on manual click
+            });
+
+            // Initial setup
+            showSlide(0);      // Show the first slide
+            startSlideShow();  // Start the auto-rotation
+            // === END SLIDESHOW SCRIPT ===
+
+        });
+    </script>
+<a href="https://wa.me/919459028853?text=Hi%20I%20want%20to%20inquire%20about" 
+class="booknow-float" target="_blank">
+    Book Now
+</a>
+
+</body>
+</html>

@@ -1,0 +1,1134 @@
+/*
+ * HI-MOTO TOURS STYLESHEET
+ * -------------------------
+ * Fonts: 'Playfair Display' (Headings), 'Inter' (Body)
+ * Colors:
+ * - #0e1d2a (Deep Midnight Navy)
+ * - #f6f7f9 (Mountain White)
+ * - #caa56b (Himalayan Sand Gold)
+ * - #4a525a (Slate Gray)
+ */
+
+/* ============================================= */
+/* --- 1. Root Variables & Global Styles --- */
+/* ============================================= */
+:root {
+    --primary-color: #0e1d2a;   /* Deep Midnight Navy */
+    --background-color: #f6f7f9; /* Mountain White */
+    --accent-color: #092861;     /* Himalayan Sand Gold */
+    --text-color: #4a525a;       /* Slate Gray */
+    --heading-color: var(--primary-color);
+    --white: #ffffff;
+    
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Inter', sans-serif;
+
+    --header-height: 80px;
+    --section-padding: 6rem 0; /* Large breathing space */
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+}
+
+body {
+    font-family: var(--font-body);
+    color: var(--text-color);
+    background-color: var(--background-color);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================= */
+/* --- 2. Typography & Links --- */
+/* ============================================= */
+h1, h2, h3, h4 {
+    font-family: var(--font-heading);
+    color: var(--heading-color);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+}
+
+h1 { font-size: 4.5rem; } /* Hero title */
+h2 { font-size: 3rem; }   /* Section titles */
+h3 { font-size: 1.75rem; } /* Card titles */
+h4 { font-size: 1.25rem; } /* Feature titles */
+
+.section-title {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.section-intro {
+    text-align: center;
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto 3.5rem auto;
+}
+
+p {
+    margin-bottom: 1rem;
+}
+
+a {
+    color: var(--accent-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: var(--primary-color);
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+ul {
+    list-style: none;
+}
+
+/* ============================================= */
+/* --- 3. Layout & Reusable Components --- */
+/* ============================================= */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.content-section {
+    padding: var(--section-padding);
+    /* The opacity: 0 that was here is REMOVED */
+}
+
+.cta-button {
+    display: inline-block;
+    padding: 0.85rem 2.25rem;
+    background-color: var(--accent-color);
+    color: var(--white);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 50px; /* Fully rounded */
+    transition: all 0.3s ease;
+    border: 2px solid var(--accent-color);
+}
+
+.cta-button:hover {
+    background-color: transparent;
+    color: var(--accent-color);
+    border-color: var(--accent-color);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* ============================================= */
+/* --- 4. Header & Navigation --- */
+/* ============================================= */.main-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--header-height);
+    
+    /* --- MODIFICATION --- */
+    /* Start fully transparent */
+    background-color: transparent; 
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-bottom: 1px solid transparent; /* Start with a transparent border */
+    /* --- END MODIFICATION --- */
+    
+    z-index: 1000;
+    /* Updated transition to be smoother */
+    transition: background-color 0.4s ease, backdrop-filter 0.4s ease, border-color 0.4s ease;
+}
+
+/* --- NEW CLASS --- */
+/* This class will be added by JavaScript on scroll */
+.main-header.scrolled {
+    background-color: rgba(255, 255, 255, 0.9); /* Your original blurred style */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+/* --- END NEW CLASS --- */
+.logo-img {
+    width: 7%;
+    height: 7%;
+    object-fit: contain; /* important so it doesn't distort */
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.nav-logo a {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    
+    /* --- MODIFICATION --- */
+    /* Start with white text to be visible on the hero video */
+    color: var(--white); 
+    /* --- END MODIFICATION --- */
+    
+    text-decoration: none;
+    transition: color 0.4s ease; /* Add transition for color change */
+}
+
+/* --- NEW --- */
+/* Change logo color when header is scrolled */
+.main-header.scrolled .nav-logo a {
+    color: var(--primary-color); /* Change back to dark color */
+}
+/* --- END NEW --- */
+
+.nav-menu {
+    display: flex;
+    gap: 2.5rem;
+}
+
+.nav-menu a {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 500;
+    
+    /* --- MODIFICATION --- */
+    /* Start with white text */
+    color: var(--white);
+    /* --- END MODIFICATION --- */
+    
+    position: relative;
+    padding: 0.5rem 0;
+    transition: color 0.4s ease; /* Add transition */
+}
+
+/* --- NEW --- */
+/* Change nav link color when header is scrolled */
+.main-header.scrolled .nav-menu a {
+    color: var(--text-color); /* Change back to dark color */
+}
+/* --- END NEW --- */
+
+
+.nav-menu a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--accent-color);
+    transition: width 0.3s ease;
+}
+
+.nav-menu a:hover::after,
+.nav-menu a.active::after {
+    width: 100%;
+}
+
+/* --- MODIFICATION: CTA Button --- */
+.nav-cta {
+    padding: 0.6rem 1.5rem;
+    font-size: 0.9rem;
+    
+    /* Start with a "ghost button" style */
+    background-color: transparent;
+    color: var(--white);
+    border: 2px solid var(--white); /* White border */
+}
+
+/* Change CTA button style on hover (when transparent) */
+.nav-cta:hover {
+    background-color: var(--white);
+    color: var(--primary-color);
+    border-color: var(--white);
+}
+
+/* Change CTA button style when header is scrolled */
+.main-header.scrolled .nav-cta {
+    background-color: var(--accent-color); /* Your gold color */
+    color: var(--white);
+    border: 2px solid var(--accent-color); /* Gold border */
+}
+
+/* Change CTA button style on hover (when scrolled) */
+.main-header.scrolled .nav-cta:hover {
+    background-color: transparent;
+    color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+/* ========== MOBILE NAVIGATION ========== */
+
+.nav-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    padding: 6px 0;
+}
+.nav-toggle span {
+    width: 26px;
+    height: 3px;
+    background: var(--white);
+    border-radius: 3px;
+    transition: background-color 0.3s ease;
+}
+
+/* when scrolled change hamburger color to dark also */
+.main-header.scrolled .nav-toggle span {
+    background: var(--primary-color);
+}
+
+@media(max-width: 768px){
+
+    .nav-menu {
+        position: absolute;
+        top: var(--header-height);
+        left: 0;
+        width: 100%;
+        background: rgba(255,255,255,0.85);
+        backdrop-filter: blur(16px);
+        flex-direction: column;
+        align-items: center;
+        padding: 1.5rem 0;
+        gap: 1.5rem;
+        display: none;
+    }
+
+    .nav-menu.show {
+        display: flex;
+    }
+
+    .nav-cta {
+        display: none;
+    }
+
+    .nav-toggle {
+        display: flex;
+    }
+}
+@media(max-width:768px){
+    .nav-menu a{
+        color: var(--primary-color) !important;
+    }
+}
+.section-cta-container {
+    text-align: center;
+    margin-top: 3.5rem; /* Adds space above the button */
+}
+
+/* ============================================= */
+/* --- 5. Hero Section (Video Background) --- */
+/* ============================================= */
+.hero {
+    position: relative;
+    height: 100vh;
+    min-height: 700px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--white);
+    overflow: hidden; /* Ensures video doesn't overflow */
+}
+
+/* This overlay sits on top of the video, but behind the text. */
+/* It adds the dark tint for readability. */
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(14, 29, 42, 0.5), rgba(14, 29, 42, 0.5));
+    z-index: 2; /* Sits above video (1) */
+}
+
+/* This class styles the <video> element from the HTML */
+.hero-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: 1; /* Stays in the back */
+    object-fit: cover;
+}
+
+.hero-content {
+    /* This ensures the text content is on top of the overlay */
+    position: relative; 
+    z-index: 3; /* Sits on top of the overlay (2) */
+    
+    /* CSS for fade-in animation */
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 1s ease-out 0.5s forwards;
+}
+
+.hero-title {
+    color: var(--white);
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    max-width: 600px;
+    margin: 0 auto 2.5rem auto;
+    opacity: 0.9;
+}
+
+.hero-cta:hover {
+    background-color: var(--white);
+    color: var(--primary-color);
+    border-color: var(--white);
+}/* ============================================= */
+/* --- 6. Explore Your Style Section --- */
+/* ============================================= */
+.explore-styles {
+    background-image:
+            url('assets/mou.png'); 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    /* The 'background-attachment: fixed;' line has been removed */
+    padding: var(--section-padding);
+}
+
+.style-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+}
+
+.style-card {
+    background-color: transparent; /* Changed to transparent for background image */
+    border-radius: 12px;
+    padding: 2.5rem; /* Slightly adjust padding for bottom-aligned content */
+    text-align: left; /* Changed to left-align text */
+    color: var(--white); /* Text color becomes white for contrast */
+    border: 1px solid rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+    
+    position: relative; /* Needed for the pseudo-element overlay */
+    overflow: hidden; /* Ensures image doesn't bleed */
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    /* To push content to the bottom and allow gradient to start subtly */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; 
+    min-height: 350px; /* Give cards a fixed height to show images */
+}
+
+/* Add a gradient overlay for text readability */
+.style-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, rgba(14, 29, 42, 0.8) 0%, transparent 50%); /* Gradient from bottom up */
+    z-index: 1; /* Below the content, above the image */
+    transition: background 0.3s ease;
+}
+
+.style-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(74, 82, 90, 0.1);
+}
+
+/* Optional: Darker gradient on hover */
+.style-card:hover::before {
+    background: linear-gradient(to top, rgba(14, 29, 42, 0.9) 0%, transparent 60%);
+}
+
+/* Content inside the card needs to be above the pseudo-element */
+.style-card .card-icon,
+.style-card .card-title,
+.style-card .card-description {
+    position: relative;
+    z-index: 2; 
+    color: var(--white); /* Ensure text stays white even if global color changes */
+}
+
+
+.card-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem; /* Slightly less margin as content is at bottom */
+}
+
+.card-title {
+    color: var(--white); /* Changed to white */
+    margin-bottom: 0.5rem;
+    line-height: 1.1; /* Adjust line height for better fit */
+}
+
+.card-description {
+    font-size: 0.95rem; /* Slightly smaller for better fit */
+    color: rgba(255, 255, 255, 0.8); /* Lighter white for description */
+    margin-bottom: 0; /* No margin at the bottom of the last item */
+}
+
+/* Specific background images for each card */
+.bike-card {
+    background-image: url('assets/Royal-Enfield-Himalayan.jpg');
+}
+
+.car-card {
+    background-image: url('assets/4X4.png');
+}
+
+.campervan-card {
+    background-image: url('assets/campervan.jpg');
+}
+
+.minibus-card {
+    background-image: url('assets/bus.png');
+}
+/* ============================================= */
+/* --- 6c. Ideal For (Who We Welcome) Section --- */
+/* ============================================= */
+
+.ideal-for-section {
+    /* === ADDED FIXED BACKGROUND IMAGE === */
+    background-image: linear-gradient(rgba(246, 247, 249, 0.714), rgba(246, 247, 249, 0.314)), /* Light overlay */
+                      url('assets/bg13.png'); /* <-- Add your background image path */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+   
+}
+.solo-card {
+    background-image: url('assets/solo.jpg');
+}
+
+.family-card {
+    background-image: url('assets/family.jpeg');
+}
+
+.group-card {
+    background-image: url('assets/grp.jpg');
+}
+
+.corporate-card {
+    background-image: url('assets/corp.png');
+}
+/* ============================================= */
+/* --- 7. Seasonal Adventures Section --- */
+/* ============================================= */
+.seasonal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    min-height: 500px;
+}
+
+/* New wrapper to make the whole card a link */
+.seasonal-link-wrapper {
+    display: block;
+    text-decoration: none;
+    border-radius: 12px;
+    overflow: hidden; /* This is important */
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.seasonal-link-wrapper:hover {
+    transform: scale(1.03);
+    box-shadow: 0 20px 40px rgba(74, 82, 90, 0.2);
+}
+
+.seasonal-card {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    padding: 2.5rem;
+    height: 100%; /* Make card fill the wrapper */
+    overflow: hidden;
+    color: var(--white);
+    /* REMOVED: background-size, background-position, etc. */
+}
+
+/* Dark gradient overlay */
+.seasonal-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(transparent 50%, rgba(14, 29, 42, 0.8));
+    transition: background 0.4s ease;
+    z-index: 2; /* Sits above slideshow, below content */
+}
+
+.seasonal-link-wrapper:hover .seasonal-card::before {
+    background: linear-gradient(transparent 70%, rgba(14, 29, 42, 0.9));
+}
+
+/* === NEW: Slideshow Styles === */
+
+.card-bg-slideshow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1; /* At the very back */
+}
+
+.card-bg-slideshow .slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0; /* Start invisible */
+    
+    /* Animation: 15s total, 3 slides = 5s per slide */
+    animation: imageFade 15s linear infinite;
+}
+
+/* NEW: Keyframe animation for the fade */
+@keyframes imageFade {
+    0%   { opacity: 0; transform: scale(1.05); } /* Start slightly scaled up */
+    16%  { opacity: 1; } /* Fade in */
+    33%  { opacity: 1; transform: scale(1.1); } /* Hold */
+    50%  { opacity: 0; } /* Fade out */
+    100% { opacity: 0; }
+}
+
+/* Stagger the animations for each slide */
+.card-bg-slideshow .slide-1 { 
+    animation-delay: 0s; 
+}
+.card-bg-slideshow .slide-2 { 
+    animation-delay: 5s; /* Starts when slide 1 is fading out */
+}
+.card-bg-slideshow .slide-3 { 
+    animation-delay: 10s; /* Starts when slide 2 is fading out */
+}
+
+/* === NEW: Add your slideshow images here === */
+
+/* Winter Slideshow Images */
+#winter-expedition .slide-1 { 
+    background-image: url('assets/winter.jpg'); 
+}
+#winter-expedition .slide-2 { 
+    background-image: url('assets/atal.png'); 
+}
+#winter-expedition .slide-3 { 
+    background-image: url('assets/summer.jpeg'); 
+}
+
+/* Summer Slideshow Images */
+#summer-escape .slide-1 { 
+    background-image: url('assets/rotang.png'); 
+}
+#summer-escape .slide-2 { 
+    background-image: url('assets/church.jpg'); 
+}
+#summer-escape .slide-3 { 
+    background-image: url('assets/temple.png'); 
+}
+
+
+/* === END: Slideshow Styles === */
+
+/* Particle container (if you use it) */
+.particle-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3; /* Sits above gradient, below content */
+    pointer-events: none; 
+}
+
+/* Content (text) */
+.seasonal-content {
+    position: relative; 
+    z-index: 4; /* Sits on top of everything */
+}
+
+.seasonal-content h2 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--white);
+}
+
+.seasonal-content h3 {
+    color: var(--white);
+    font-size: 2.25rem;
+}
+
+.seasonal-content p {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.seasonal-link {
+    font-weight: 700;
+    color: var(--white);
+    position: relative;
+    padding-bottom: 5px;
+}
+
+.seasonal-link::after {
+    content: '→';
+    margin-left: 8px;
+    transition: margin-left 0.3s ease;
+}
+
+.seasonal-link-wrapper:hover .seasonal-link::after {
+    margin-left: 15px;
+}/* ============================================= */
+/* --- 8. Why Choose Us Section --- */
+/* ============================================= */
+.why-choose-us {
+    /* Main section background image */
+    background-image: linear-gradient(rgba(231, 231, 231, 0.85), rgba(246, 247, 249, 0.85)), /* Light overlay */
+                      url('assets/bg4.png'); /* Your background image */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* Optional: for a subtle parallax effect */
+    padding: var(--section-padding); /* Ensure padding is applied */
+}
+
+/* Ensure content within the section is visible and readable */
+.why-choose-us .section-title,
+.why-choose-us .section-intro {
+    color: var(--primary-color); /* Make sure text is readable on the overlay */
+    position: relative; /* Ensure it's above any potential pseudo-elements */
+    z-index: 2;
+}
+
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    text-align: left;
+    position: relative; /* Needed for z-index context if we add a background overlay */
+    z-index: 2; /* Ensures grid is above section's potential ::before overlay */
+}
+
+.feature-item {
+    padding: 2rem; /* Slightly more padding */
+    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08); /* Subtle shadow for depth */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+}
+
+.feature-icon {
+    font-size: 2.8rem; /* Slightly larger icon */
+    margin-bottom: 1.5rem;
+    color: var(--accent-color);
+}
+
+.feature-item h4 {
+    color: var(--primary-color);
+    margin-bottom: 0.75rem; /* More space below heading */
+}
+
+.feature-item p {
+    font-size: 1rem;
+    color: var(--text-color); /* Ensure readability */
+    margin-bottom: 0; /* No margin at the bottom of the last item */
+}
+
+/* ============================================= */
+/* --- 9. Photo Gallery Section --- */
+/* ============================================= */
+.photo-gallery {
+    padding-bottom: 0; /* Gallery will be flush with footer */
+}
+
+.photo-gallery .container {
+    max-width: 100%; /* Make container full-width */
+    padding: 0;
+}
+
+.photo-gallery .section-title,
+.photo-gallery .section-intro {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 1.5rem; /* Re-apply padding for text */
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 0.5rem; /* Small gap for a tight grid */
+    margin-top: 3.5rem;
+}
+
+.gallery-item {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 1 / 1; /* Square images */
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease, filter 0.4s ease;
+}
+
+.gallery-item:hover img {
+    transform: scale(1.1);
+    filter: brightness(0.8);
+}
+
+/* ============================================= */
+/* --- 10. Footer --- */
+/* ============================================= */
+.main-footer {
+    background-color: var(--primary-color);
+    color: rgba(255, 255, 255, 0.7);
+    padding: 5rem 0 0 0;
+}
+
+.footer-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1.5fr;
+    gap: 3rem;
+    padding-bottom: 4rem;
+}
+
+.footer-branding h3 {
+    font-size: 1.75rem;
+    color: var(--white);
+    margin-bottom: 1rem;
+}
+
+.footer-links h4,
+.footer-social h4,
+.footer-contact h4 {
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.footer-links ul li {
+    margin-bottom: 0.75rem;
+}
+
+.footer-links a,
+.footer-social a,
+.footer-contact a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+}
+
+.footer-links a:hover,
+.footer-social a:hover,
+.footer-contact a:hover {
+    color: var(--white);
+    padding-left: 5px;
+}
+
+.footer-social a {
+    display: block;
+    margin-bottom: 0.75rem;
+}
+
+.footer-contact p {
+    margin-bottom: 0.5rem;
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1.5rem 0;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.footer-bottom p {
+    margin: 0;
+}
+
+/* ============================================= */
+/* --- 11. Animations --- */
+/* ============================================= */
+/* This is for the hero content fade-in only */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* The on-scroll animations were removed to fix the layout. */
+/* We can add them back later with JavaScript. */
+
+
+/* ============================================= */
+/* --- 12. Responsive Media Queries --- */
+/* ============================================= */
+@media (max-width: 992px) {
+    h1 { font-size: 3.5rem; }
+    h2 { font-size: 2.5rem; }
+    
+    .style-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .features-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .footer-container {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        /* Hides nav menu by default on mobile */
+        /* You would add JS to toggle a 'nav-open' class */
+    }
+
+    .nav-menu {
+        /* Styles for a mobile menu (e.g., hamburger) would go here */
+        display: none; 
+    }
+
+    .hero {
+        min-height: 600px;
+    }
+
+    .hero-title {
+        font-size: 2.75rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.1rem;
+    }
+
+    .seasonal-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .style-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .footer-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .footer-links a:hover,
+    .footer-social a:hover,
+    .footer-contact a:hover {
+        padding-left: 0;
+    }
+}
+@media (max-width: 768px) {
+    .nav-menu {
+        display: none;
+    }
+    
+    .nav-cta {
+        display: none;
+    }
+}.booknow-float {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #F45B69;
+    color: #fff;
+    padding: 14px 26px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 17px;
+    text-decoration: none;
+    z-index: 999;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 6px 18px rgba(244, 91, 105, 0.35);
+
+    animation: breathing 2.4s ease-in-out infinite;
+}
+
+@keyframes breathing {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+
+/* mobile responsive – center bottom */
+@media(max-width: 600px) {
+    .booknow-float {
+        transform: translateX(50%);
+        bottom: 20px;
+        font-size: 14px;
+        padding: 12px 18px;
+    }
+}
+.gallery-section {
+  padding: 80px 0;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 14px;
+  margin-bottom: 50px;
+}
+
+.gallery-grid .gallery-item {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.gallery-grid .tall { grid-row: span 2; height: 380px; }
+.gallery-grid .wide { grid-column: span 3; }
+
+@media (max-width: 900px) {
+  .gallery-grid { grid-template-columns: repeat(3, 1fr); }
+  .gallery-grid .wide { grid-column: span 3; }
+  .gallery-grid .tall { grid-row: span 1; height: 260px; }
+}
+
+@media (max-width: 600px) {
+  .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+  .gallery-grid .wide { grid-column: span 2; }
+}
+
+.reels-row {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  scroll-snap-type: x mandatory;
+}
+
+.reels-row::-webkit-scrollbar { display: none; }
+
+.reel {
+  flex: 0 0 270px; /* width like instagram reel thumb */
+  aspect-ratio: 9/16;
+  border-radius: 18px;
+  overflow: hidden;
+  scroll-snap-align: center;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.25);
+  background: #000;
+}
+
+.reel video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+        /* Slider Navigation Buttons */
+        .tour-slider-container .slider-nav {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            padding: 0.5rem 1rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border: none;
+            user-select: none;
+            transition: background 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+        }
+        .tour-slider-container .slider-nav:hover {
+            background: #fff;
+            color: #c0392b;
+        }
+        .tour-slider-container .slider-nav.prev {
+            left: -25px; /* Position half-out */
+        }
+        .tour-slider-container .slider-nav.next {
+            right: -25px; /* Position half-out */
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .tour-card {
+                flex: 0 0 90%; /* One card takes 90% of screen */
+                margin-right: 1rem;
+            }
+            .tour-card:first-child {
+                margin-left: 5%; /* Center the first card */
+            }
+            .tour-card:last-child {
+                margin-right: 5%; /* Space after the last card */
+            }
+
+            /* Hide desktop buttons on mobile (swipe is better) */
+            .tour-slider-container .slider-nav {
+                display: none;
+            }
+        }
